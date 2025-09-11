@@ -1,0 +1,23 @@
+body {
+    background-color: whitesmoke;
+    width: 80vw;
+    border: 3px black solid;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+p {
+    margin: 0 auto;
+    width: fit-content;
+    padding: 10px;
+    background-color: maroon;
+    color: whitesmoke;
+    
+}
+
+footer {
+    margin: 0 auto;
+    padding: 15px;
+}
+
