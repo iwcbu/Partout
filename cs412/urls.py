@@ -21,7 +21,10 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("hw/", include("hw.urls")),
-    path("quotes/", include("quotes.urls"))
+    path("hw/", include("hw.urls")), # hello world test
+    path("quotes/", include("quotes.urls")), # ps1
+    path("formdata/", include("formdata.urls")), # formdata test
+    path('restaurant', include('restaurant.urls')), # ps2
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
