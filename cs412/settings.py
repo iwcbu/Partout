@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'quotes', # Assignment 1
     'formdata', # Form data test
     'restaurant', # Assingment 2
+    'blog', # Blog test
     
 ]
 
