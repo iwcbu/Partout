@@ -16,8 +16,6 @@ header h1 {
 }
 
 #navBox {
-    position: fixed;
-    bottom: 0;
     width: 100%;
     background-color: #fafafa;
     padding: 10px 0;
@@ -288,7 +286,7 @@ profilePost {
 
 /* ------ create_post_form.html ------ */
 
-/* i don't understand why this isn't working */
+/* works now */
 
 #boxCPF {
     max-width: 500px;
