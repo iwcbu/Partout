@@ -15,25 +15,30 @@ header h1 {
     color: rgb(244, 244, 244);
 }
 
-.navbar ul {
-    list-style: none;
-    margin: 10px 0 0;
-    padding: 0;
+#navBox {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #fafafa;
+    padding: 10px 0;
+    border-top: 1px solid #ccc;
+}
+
+#navBox .navbar ul {
     display: flex;
     justify-content: center;
     gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.navbar li {
-    display: inline;
-}
-
-.navbar a {
+#navBox .navbar a {
     text-decoration: none;
-    color: rgb(239, 239, 239);
+    color: #333;
     font-weight: bold;
-    transition: color 0.2s ease;
 }
+
 
 .navbar a:hover {
     color: black;
@@ -279,3 +284,72 @@ profilePost {
     object-fit: cover;
     display: block;
 }
+
+
+/* ------ create_post_form.html ------ */
+
+
+#boxCPF {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+}
+
+#titleCPF {
+    text-align: center;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#tableCPF {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#tableCPF b {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+#tableCPF input[type="text"],
+#tableCPF input[type="url"],
+#tableCPF textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+#createPostSubCan {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#submitButtonCPF {
+    padding: 10px 20px;
+    background-color: #6970ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+#cancelButtonCPF {
+    padding: 10px 20px;
+    background-color: #ccc;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+
