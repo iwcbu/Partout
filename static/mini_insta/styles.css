@@ -212,7 +212,24 @@ profilePost {
     border: 1px solid #ddd;
 }
 
+#updateButtonSP {
+    padding: 7px 10px;
+    background-color: rgb(160, 160, 219);
+    color:rgb(234, 229, 219);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: all .2s ease-in-out;
+    border: 1px rgba(0,0,0,0) solid;
 
+}
+
+
+#updateButtonSP:hover {
+    color: white;
+    background-color: rgb(105, 105, 255);
+    border: 1px white solid;
+}
 
 
 
@@ -281,6 +298,7 @@ profilePost {
     object-fit: cover;
     display: block;
 }
+
 
 
 /* ------ create_post_form.html ------ */
