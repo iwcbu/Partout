@@ -299,6 +299,40 @@ profilePost {
     display: block;
 }
 
+#updatePostButtonSP {
+    padding: 7px 10px;
+    background-color: rgb(105, 105, 255);
+    color:rgb(234, 229, 219);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: all .2s ease-in-out;
+    border: 1px rgba(0,0,0,0) solid;
+}
+
+#updatePostButtonSP:hover {
+    background-color: white;
+    color: rgb(105, 105, 255);
+    border: 1px rgb(105, 105, 255) solid;
+}
+
+#deletePostButtonSP {
+    padding: 7px 10px;
+    background-color: rgb(255, 78, 78);
+    color:rgb(234, 229, 219);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: all .2s ease-in-out;
+    border: 1px rgba(0,0,0,0) solid;
+}
+
+#deletePostButtonSP:hover {
+    background-color: white;
+    color:rgb(255, 78, 78);
+    border: 1px rgb(255, 78, 78) solid;
+}
+
 
 
 /* ------ create_post_form.html ------ */
@@ -387,3 +421,9 @@ profilePost {
  
 doesn't show files selected, ask professor
 */
+
+#optionFormH3Box {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
