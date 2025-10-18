@@ -274,18 +274,19 @@ profilePost {
     background-color: rgb(250, 250, 250);
 }
 
-#postHeader {
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 10px;
-    color: #1c1c1c;
-}
-
 #postCaption {
     font-size: 1rem;
     font-weight: 500;
     margin-bottom: 10px;
     color: #333;
+}
+
+#postDate {
+    font-size: .8rem;
+    font-weight: 500;
+    padding-bottom: 20px;
+    margin-top: 0;
+    color: #1c1c1c;
 }
 
 .allPhotos {
@@ -354,6 +355,26 @@ profilePost {
     background-color: white;
     color:rgb(255, 78, 78);
     border: 1px rgb(255, 78, 78) solid;
+}
+
+
+.commentSection {
+    margin-top: 15px;
+    padding: 12px 15px;
+    background-color: #fafafa;
+    border-radius: 0 0 12px 12px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.comment {
+    padding: 10px;
+    margin: 0;
+    font-size: .8rem;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #eee;
+}
+
+.textSection {
 }
 
 
