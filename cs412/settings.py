@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'formdata', # Form data test
     'restaurant', # Assingment 2
     'blog', # Blog test
-    'mini_insta', # Assignment 3
+    'mini_insta', # Assignment 3-7
+    'marathon_analysis', # module 8 exampel
+    'voter_analytics', # Assignment 8
     
 ]
 
