@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'mini_insta', # Assignment 3-7
     'marathon_analysis', # module 8 exampel
     'voter_analytics', # Assignment 8
+    'dadjokes', # Assignment 10
+
+    'rest_framework', # Django REST Framework (module 10)
     
 ]
 
@@ -151,3 +154,10 @@ if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Module 10 ~ REST API frameworks
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS'  : 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE'                 : 10,
+}
