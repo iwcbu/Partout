@@ -1,0 +1,53 @@
+<!-- partout/templates/partout/market.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/market.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+
+<div class="container">
+    <h3>Active Listings</h3>
+    <form class="widgetSearch">
+        <!-- <div name="part_type" class="searchBox">
+            <div class="searchInput">
+                <label for="carSearch">Car</label>
+                <input type="text" id="carSearch">
+            </div>
+        </div> -->
+        <select name="part_type">
+            <option value="">All parts</option>
+            {% for value,label in part_type_choices %}
+            <option value="{{ value }}" {% if current_filters.part_type == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <input type="text" name="q" placeholder="Search..." value="{{ current_filters.q }}">
+
+        <button type="submit">Search</button>
+    </form>
+            
+            
+    <div class="widgetLong">
+        <div class="listingGallery">
+            {% for listing in listings %}
+            <div class="listingGalleryCard">
+                {% if listing.image%}
+                <img src="{{ listing.image.url }}" alt="car part">
+                {% else %}
+                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+                {% endif %}
+                <h4>{{ listing.title }}</h4>
+                <p>{{ listing.description }}</p>
+            </div>
+            {% endfor %}
+        </div> 
+    </div>
+</div>
+
+{% endblock content %}

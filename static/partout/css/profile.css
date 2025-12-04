@@ -1,0 +1,213 @@
+/* =========================
+   Profile page layout
+   ========================= */
+
+.profilePage {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* =========================
+   Profile header
+   ========================= */
+
+.profileHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.profileHeader-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profileAvatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.profileName {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 650;
+}
+
+.profileHandle {
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.profileLocation {
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+/* Stats row */
+
+.profileStats {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.profileStat {
+  display: flex;
+  flex-direction: column;
+  min-width: 70px;
+}
+
+.profileStat-number {
+  text-align: center;
+  font-weight: 650;
+  font-size: 1.05rem;
+}
+
+.profileStat-label {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Wider screens: header layout tweaks */
+@media (min-width: 768px) {
+  .profileHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* =========================
+   Garage section
+   ========================= */
+
+.profileGarage h2 {
+  margin-bottom: 0.4rem;
+}
+
+.profileGarage-subtitle {
+  margin: 0 0 0.9rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.profileGarage-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.profileGarage-card {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+}
+
+.profileGarage-card h3 {
+  margin: 0 0 0.2rem;
+  font-size: 1rem;
+}
+
+.profileGarage-card p {
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.profileGarage-tagline {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+@media (min-width: 640px) {
+  .profileGarage-list {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+/* =========================
+   Recent listings section
+   ========================= */
+
+.profileListings h2 {
+  margin-bottom: 0.8rem;
+}
+
+.profileListings {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.profileListings .listingGalleryCard {
+  margin-bottom: 0;
+}
+
+
+
+/* =========================
+   Listing gallery cards
+   (shared small-card style)
+   ========================= */
+
+.listingGalleryCard {
+  background: white;
+  border-radius: 10px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.listingGalleryCard:hover {
+  transform: scale(1.02);
+}
+
+.listingGalleryCard img {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 0.6rem;
+  border: 2px solid whitesmoke;
+}
+
+.listingGalleryCard h2,
+.listingGalleryCard h3 {
+  font-size: 1rem;
+  margin: 0;
+  color: #111827;
+}
+
+.listingGalleryCard p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-top: 0.3rem;
+}
+
+.listingGallery {
+  display: grid;
+  justify-content: center;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 200px));
+}
+
+.listingGallery > h3 {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 768px) {
+  .listingGallery .listingGalleryCard {
+    margin-bottom: 0; 
+  }
+}

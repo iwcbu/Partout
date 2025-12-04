@@ -1,0 +1,95 @@
+<!-- partout/templates/partout/home.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/home.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+
+<div class="container">
+
+    <!-- unread messages or recent messages if none unread -->
+    <div class="widget">
+        <h3>Messages</h3>
+        <div class="messageCard">
+            <img src="https://thumbs.dreamstime.com/b/black-business-man-thumb-up-happy-giving-modern-office-67668710.jpg" alt="profile picture">
+            <h4>Name Unread </h4>
+            <p>+3 unread messages</p>
+        </div>
+        <div class="messageCard">
+            <img src="https://thumbs.dreamstime.com/b/black-business-man-thumb-up-happy-giving-modern-office-67668710.jpg" alt="profile picture">
+            <h4>Name Read</h4>
+            <p>First words of mes...</p>
+        </div>
+        <div class="messageCard">
+            <img src="https://thumbs.dreamstime.com/b/black-business-man-thumb-up-happy-giving-modern-office-67668710.jpg" alt="profile picture">
+            <h4>Name Unread </h4>
+            <p>+3 unread messages</p>
+        </div>
+        
+        <button>See all</button>
+
+    </div>
+   
+    <!-- recent/saved listings or empty if nothing listed -->
+    <div class="widget">
+        <h3>Saved Listings</h3>
+        <div class="savedListingCard">
+            <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+            <h4>Listing title</h2>
+            <p>This will be the listing text</p>
+        </div>
+        <div class="savedListingCard">
+            <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+            <h4>Listing title</h2>
+            <p>This will be the listing text</p>
+        </div>
+        <div class="savedListingCard">
+            <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+            <h4>Listing title</h2>
+            <p>This will be the listing text</p>
+        </div>
+        
+        <button>See all</button>
+        
+    </div>
+   
+    <!-- recomended listings based on garage -->
+    <div class="widgetLong">
+        <h3>Recommended Listings</h3>
+        <div class="listingGallery">
+            <div class="listingGalleryCard">
+                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+                <h4>Listing title</h4>
+                <p>This will be the listing text</p>
+            </div>
+            <div class="listingGalleryCard">
+                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+                <h4>Listing title</h4>
+                <p>This will be the listing text</p>
+            </div>
+            <div class="listingGalleryCard">
+                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+                <h4>Listing title</h4>
+                <p>This will be the listing text</p>
+            </div>
+            <div class="listingGalleryCard">
+                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+                <h4>Listing title</h4>
+                <p>This will be the listing text</p>
+            </div>
+            <div class="listingGalleryCard">
+                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+                <h4>Listing title</h4>
+                <p>This will be the listing text</p>
+            </div>
+        </div>
+    </div>
+        
+
+</div>
+
+{% endblock %}

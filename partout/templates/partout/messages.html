@@ -1,0 +1,83 @@
+<!-- partout/templates/partout/messages.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/messages.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+
+<div class="container">
+
+    <section class="offerMessages">
+        <div class="widget">
+            <h3>Listing Offers</h3>
+
+            {% if offers %}
+                {% for offer in offers %}
+                    <div class="messageCard">
+                        {% if offer.buyer.profile_image %}
+                            <img src="{{ offer.buyer.profile_image.url }}" alt="profile picture">
+                        {% else %}
+                            <img src="{% static 'partout/img/default-avatar.png' %}" alt="profile picture">
+                        {% endif %}
+
+                        <div class="messageInfo">
+                            <h4>{{ offer.buyer.first_name }} {{ offer.buyer.last_name }}</h4>
+                            <h4 style="color: green;">${{ offer.amount }}</h4>
+                            <p>
+                                On: {{ offer.listing.title }}
+                                ({{ offer.get_status_display }})
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>You don’t have any offers yet.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- SECTION 2: Direct Messages -->
+    <section class="directMessages">
+        <div class="widget">
+            <h3>Messages</h3>
+
+            {% if conversations %}
+                {% for convo in conversations %}
+                    <div class="messageCard">
+                        {# just grab the first participant's image for now #}
+                        {% with p=convo.participants.first %}
+                            {% if p and p.profile_image %}
+                                <img src="{{ p.profile_image.url }}" alt="profile picture">
+                            {% else %}
+                                <img src="{% static 'partout/img/default-avatar.png' %}" alt="profile picture">
+                            {% endif %}
+                        {% endwith %}
+
+                        <div class="messageInfo">
+                            <h4>
+                                {# list all participants #}
+                                {% for p in convo.participants.all %}
+                                    {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </h4>
+
+                            <p>
+                                Last updated:
+                                {{ convo.updated|date:"M j, g:i a" }}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>You don’t have any messages yet.</p>
+            {% endif %}
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}

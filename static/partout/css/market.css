@@ -1,0 +1,151 @@
+/* PLACE HOLDER STYLING */
+
+/* =========================
+   Home layout (widgets)
+   ========================= */
+
+.container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* On wider screens:
+   - 2 columns
+   - widgetLong spans full safe area underneath
+*/
+
+.widgetLong {
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.widget h2,
+.widgetLong h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  color: #111827;
+}
+
+/* =========================
+   Listing gallery cards
+   (shared small-card style)
+   ========================= */
+
+.listingGalleryCard {
+  background: white;
+  border-radius: 10px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.listingGalleryCard:hover {
+  transform: scale(1.02);
+}
+
+.listingGalleryCard img {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 0.6rem;
+  border: 2px solid whitesmoke;
+}
+
+.listingGalleryCard h2,
+.listingGalleryCard h3 {
+  font-size: 1rem;
+  margin: 0;
+  color: #111827;
+}
+
+.listingGalleryCard p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-top: 0.3rem;
+}
+
+.listingGallery {
+  display: grid;
+  justify-content: center;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 200px));
+}
+
+/* Make the section title span the full width */
+.listingGallery > h3 {
+  grid-column: 1 / -1;
+}
+
+/* On wider screens, cards form a responsive grid
+   using the same small-card style */
+@media (min-width: 768px) {
+  .listingGallery .listingGalleryCard {
+    margin-bottom: 0; /* gaps handled by grid */
+  }
+}
+
+/* =========================
+   Responsive padding tweaks
+   ========================= */
+
+@media (min-width: 768px) {
+  #blockContentContainer {
+    padding: 2rem;
+  }
+
+  .widget,
+  .widgetLong {
+    padding: 1.5rem;
+  }
+}
+
+
+
+/* =========================
+   Market Gallery Search Inputs
+   ========================= */
+.widgetSearch {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.searchBox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; 
+}
+
+.searchInput {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 180px;
+}
+
+.searchInput label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+
+.searchInput input {
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+  outline: none;
+  background-color: #f9fafb;
+}
+
+.searchInput input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.3);
+  background-color: #ffffff;
+}

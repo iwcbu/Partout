@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'marathon_analysis', # module 8 exampel
     'voter_analytics', # Assignment 8
     'dadjokes', # Assignment 10
+    'partout', # final project
 
     'rest_framework', # Django REST Framework (module 10)
     

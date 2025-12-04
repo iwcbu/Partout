@@ -1,0 +1,194 @@
+/* PLACE HOLDER STYLING */
+
+
+/* =========================
+   Home layout (widgets)
+   ========================= */
+
+.container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* On wider screens:
+   - 2 columns
+   - widgetLong spans full safe area underneath
+*/
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .widgetLong {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Individual widget boxes */
+
+.widget,
+.widgetLong {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.widget h2,
+.widgetLong h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  color: #111827;
+}
+
+/* =========================
+   Message cards
+   ========================= */
+
+.messageCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  background: #f9fafb;
+  transition: background 0.15s ease;
+}
+
+.messageCard:hover {
+  background: #f1f5f9;
+}
+
+.messageCard img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.messageCard h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+}
+
+.messageCard p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* =========================
+   Saved Listing cards
+   ========================= */
+
+.savedListingCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  background: #f9fafb;
+  transition: background 0.15s ease;
+}
+
+.savedListingCard:hover {
+  background: #f1f5f9;
+}
+
+.savedListingCard img {
+  width: 50px;
+  height: 50px;
+  border-radius: 10%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.savedListingCard h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+}
+
+.savedListingCard p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* =========================
+   Listing gallery cards
+   (shared small-card style)
+   ========================= */
+
+.listingGalleryCard {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.listingGalleryCard:hover {
+  transform: scale(1.02);
+}
+
+.listingGalleryCard img {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 0.6rem;
+}
+
+.listingGalleryCard h2,
+.listingGalleryCard h3 {
+  font-size: 1rem;
+  margin: 0;
+  color: #111827;
+}
+
+.listingGalleryCard p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-top: 0.3rem;
+}
+
+.listingGallery {
+  display: grid;
+  justify-content: center;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 200px));
+}
+
+/* Make the section title span the full width */
+.listingGallery > h3 {
+  grid-column: 1 / -1;
+}
+
+/* On wider screens, cards form a responsive grid
+   using the same small-card style */
+@media (min-width: 768px) {
+
+  .listingGallery .listingGalleryCard {
+    margin-bottom: 0; /* gaps handled by grid */
+  }
+}
+
+/* =========================
+   Responsive padding tweaks
+   ========================= */
+
+@media (min-width: 768px) {
+  #blockContentContainer {
+    padding: 2rem;
+  }
+
+  .widget,
+  .widgetLong {
+    padding: 1.5rem;
+  }
+}
