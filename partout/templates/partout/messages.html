@@ -47,30 +47,32 @@
 
             {% if conversations %}
                 {% for convo in conversations %}
-                    <div class="messageCard">
-                        {# just grab the first participant's image for now #}
-                        {% with p=convo.participants.first %}
-                            {% if p and p.profile_image %}
-                                <img src="{{ p.profile_image.url }}" alt="profile picture">
-                            {% else %}
-                                <img src="{% static 'partout/img/default-avatar.png' %}" alt="profile picture">
-                            {% endif %}
-                        {% endwith %}
+                    <a href="{% url 'conversation' convo.pk %}">
+                        <div class="messageCard">
+                            {# just grab the first participant's image for now #}
+                            {% with p=convo.participants.first %}
+                                {% if p and p.profile_image %}
+                                    <img src="{{ p.profile_image.url }}" alt="profile picture">
+                                {% else %}
+                                    <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture">
+                                {% endif %}
+                            {% endwith %}
 
-                        <div class="messageInfo">
-                            <h4>
-                                {# list all participants #}
-                                {% for p in convo.participants.all %}
-                                    {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %}, {% endif %}
-                                {% endfor %}
-                            </h4>
+                            <div class="messageInfo">
+                                <h4>
+                                    {# list all participants #}
+                                    {% for p in convo.participants.all %}
+                                        {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </h4>
 
-                            <p>
-                                Last updated:
-                                {{ convo.updated|date:"M j, g:i a" }}
-                            </p>
+                                <p>
+                                    Last updated:
+                                    {{ convo.updated|date:"M j, g:i a" }}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </a>    
                 {% endfor %}
             {% else %}
                 <p>You don’t have any messages yet.</p>

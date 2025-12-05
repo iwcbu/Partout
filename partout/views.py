@@ -1,32 +1,50 @@
 # partout/views.py
 from django.views.generic import TemplateView, ListView, DetailView
 from django.db.models import Count, Q
+from django.urls import reverse
+from django.shortcuts import redirect
 from .models import *
 
 
 class HomeView(TemplateView):
     template_name = "partout/home.html"
 
+    def get_current_driver(self):
+        """
+        maps the logged in user to the Driver.
+        """
+        user = self.request.user
+        if not user.is_authenticated:
+            return None
+
+        try:
+            return Driver.objects.get(email=user.email)
+        except Driver.DoesNotExist:
+            return None
+
+
     def get_context_data(self, **kwargs):
         '''        
         recent_listings - Newest active listings
         
         popular_listings - "Popular" listings by like count
-'''
+
+        '''
+
         context = super().get_context_data(**kwargs)
+
+        user = self.request.user
+        driver = self.get_current_driver()
+        if user.is_authenticated and driver:
+            context["messages"] = Message.objects.filter(receiver=driver).order_by("-created")[:3]
 
         context["recent_listings"] = (
             Listing.objects.filter(status="active")
             .select_related("seller", "car")
-            .order_by("-created")[:8]
+            .order_by("-created")[:3]
         )
 
-        context["popular_listings"] = (
-            Listing.objects.filter(status="active")
-            .annotate(num_likes=Count("likes"))
-            .select_related("seller", "car")
-            .order_by("-num_likes", "-created")[:8]
-        )
+        context["popular_listings"] = (Listing.objects.filter(status="active").annotate(num_likes=Count("likes")).select_related("seller", "car").order_by("-num_likes", "-created")[:8])
 
         return context
 
@@ -139,6 +157,66 @@ class MessagesView(ListView):
             context["offers"] = (Offer.objects.all())
 
         return context
+
+
+class ConversationView(DetailView):
+    template_name = "partout/conversation.html"
+    model = DirectMessage
+
+    def get_current_driver(self):
+        """
+        maps the logged in user to the Driver.
+        """
+        user = self.request.user
+        if not user.is_authenticated:
+            return None
+
+        try:
+            return Driver.objects.get(email=user.email)
+        except Driver.DoesNotExist:
+            return None
+
+    def get_context_data(self, **kwargs):
+
+        context =  super().get_context_data(**kwargs)
+
+        driver = self.get_current_driver()
+        if driver:
+            context["driver"] = driver
+
+            pk = self.kwargs["pk"]
+            c = DirectMessage.objects.get(pk=pk)
+
+            peeps = c.participants.all()
+            context["participants"] = peeps
+
+            convo = Message.objects.filter(conversation=c).order_by("created")
+
+            context["conversation"] = convo
+
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        convo = self.object
+        driver = self.get_current_driver()
+
+        peeps = convo.participants.all()
+        receiver = driver
+        for p in peeps:
+            if p != driver:
+                receiver = p
+
+        if driver is None:
+            return redirect("login")
+        
+        text = request.POST.get("text","").strip()
+        if text:
+            Message.objects.create(conversation=convo, sender=driver,text=text,receiver=receiver)
+
+        return redirect("conversation", pk=convo.pk)
+
+
 
 
 class ProfileView(DetailView):

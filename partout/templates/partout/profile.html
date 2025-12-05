@@ -14,7 +14,7 @@
             {% if driver.profile_image %}
             <img src="{{ driver.profile_image.url }}" alt="Profile picture" class="profileAvatar">
             {% else %}
-            <img src="https://thumbs.dreamstime.com/b/black-business-man-thumb-up-happy-giving-modern-office-67668710.jpg" alt="Profile picture" class="profileAvatar">
+            <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="profileAvatar">
             {% endif %}
             <div>
                 <h1 class="profileName">

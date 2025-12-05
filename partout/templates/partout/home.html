@@ -11,46 +11,50 @@
 
 <div class="container">
 
-    <!-- unread messages or recent messages if none unread -->
     <div class="widget">
         <h3>Messages</h3>
-        <div class="messageCard">
-            <img src="https://thumbs.dreamstime.com/b/black-business-man-thumb-up-happy-giving-modern-office-67668710.jpg" alt="profile picture">
-            <h4>Name Unread </h4>
-            <p>+3 unread messages</p>
-        </div>
-        <div class="messageCard">
-            <img src="https://thumbs.dreamstime.com/b/black-business-man-thumb-up-happy-giving-modern-office-67668710.jpg" alt="profile picture">
-            <h4>Name Read</h4>
-            <p>First words of mes...</p>
-        </div>
-        <div class="messageCard">
-            <img src="https://thumbs.dreamstime.com/b/black-business-man-thumb-up-happy-giving-modern-office-67668710.jpg" alt="profile picture">
-            <h4>Name Unread </h4>
-            <p>+3 unread messages</p>
-        </div>
+        {% if messages %}
+        
+            {% for m in messages %}
+                <a href="{% url 'conversation' m.conversation.pk %}">
+
+                    <div class="messageCard">
+                        {% if m.sender.profile_image %}
+                        <img src="{{ m.sender.profile_image.url }}" alt="profile picture">
+                        {% else %}
+                        <img src="https://thumbs.dreamstime.com/b/black-business-man-thumb-up-happy-giving-modern-office-67668710.jpg" alt="profile picture">
+                        {% endif %}
+                        <h4>{{ m.sender.first_name }}</h4>
+                        {% if not m.is_read %} 
+                        <p style="font-weight: bolder;">{{ m.text|slice:30 }} {% if m.text.length > 30 %}...{% endif %}</p>
+                        {% else %}
+                        <p>{{ m.text|slice:30 }}{% if m.text.length > 30 %}...{% endif %}</p>
+                        {% endif %}
+                    </div>
+                </a>
+                {% endfor %}
+        {% endif %}
+
         
         <button>See all</button>
 
     </div>
    
-    <!-- recent/saved listings or empty if nothing listed -->
-    <div class="widget">
-        <h3>Saved Listings</h3>
-        <div class="savedListingCard">
-            <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-            <h4>Listing title</h2>
-            <p>This will be the listing text</p>
-        </div>
-        <div class="savedListingCard">
-            <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-            <h4>Listing title</h2>
-            <p>This will be the listing text</p>
-        </div>
-        <div class="savedListingCard">
-            <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-            <h4>Listing title</h2>
-            <p>This will be the listing text</p>
+    <!-- saved listings or empty if nothing listed -->
+    <div class="widgetLong">
+        <h3>Recent Listings</h3>
+        <div class="listingGallery">
+            {% for listing in recent_listings %}
+            <div class="listingGalleryCard">
+                {% if listing.image %}
+                <img src="{{listing.image.url}}" alt="car part">
+                {% else %}
+                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+                {% endif %}
+                <h4>{{listing.title|slice:15}}</h4>
+                <p>{{ listing.description|slice:30 }}</p>
+            </div>
+            {% endfor %}
         </div>
         
         <button>See all</button>
@@ -59,34 +63,23 @@
    
     <!-- recomended listings based on garage -->
     <div class="widgetLong">
-        <h3>Recommended Listings</h3>
+        <h3>Recent Listings</h3>
         <div class="listingGallery">
+            {% for listing in recent_listings %}
             <div class="listingGalleryCard">
+                {% if listing.image %}
+                <img src="{{listing.image.url}}" alt="car part">
+                {% else %}
                 <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-                <h4>Listing title</h4>
-                <p>This will be the listing text</p>
+                {% endif %}
+                <h4>{{listing.title|slice:15}}</h4>
+                <p>{{ listing.description|slice:30 }}</p>
             </div>
-            <div class="listingGalleryCard">
-                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-                <h4>Listing title</h4>
-                <p>This will be the listing text</p>
-            </div>
-            <div class="listingGalleryCard">
-                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-                <h4>Listing title</h4>
-                <p>This will be the listing text</p>
-            </div>
-            <div class="listingGalleryCard">
-                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-                <h4>Listing title</h4>
-                <p>This will be the listing text</p>
-            </div>
-            <div class="listingGalleryCard">
-                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-                <h4>Listing title</h4>
-                <p>This will be the listing text</p>
-            </div>
+            {% endfor %}
         </div>
+        
+        <button>See all</button>
+        
     </div>
         
 

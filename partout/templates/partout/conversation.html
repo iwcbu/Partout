@@ -1,0 +1,197 @@
+<!-- partout/templates/partout/conversation.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+<!-- {% block sub_css %}
+    <link rel="stylesheet" href="{% static 'partout/css/conversation.css' %}">
+    {% endblock sub_css %} -->
+
+{% block content %}
+
+<a href="{% url 'messages' %}">
+    <h3><- Back to messages </h3>
+</a>
+<div class="container">
+    <h1 style="color: rgb(205, 205, 205)"> 
+        {% for p in participants %}
+            {% if p == driver %}
+            {% else %}
+                {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %}, {% endif %}
+            {% endif %}
+        {% endfor %}
+    </h1>
+
+    <div class="conversation-board">
+        {% for m in conversation %} 
+        {% if m.sender == driver %}
+            <div class="bubble-box">
+                <div class="driver-bubble">
+                    <p class="bubble-text">{{ m.text }}</p>
+                </div>
+                {% if driver.profile_image %}
+                <img src="{{ m.sender.profile_image.url }}" alt="pfp" class="bubble-avatar">
+                {% else %}
+                <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="bubble-avatar">
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="bubble-box-other">
+                {% if m.sender.profile_image %}
+                <img src="{{ m.sender.profile_image.url }}" alt="Profile picture" class="bubble-avatar-other">
+                {% else %}
+                <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="bubble-avatar-other">
+                {% endif %}
+                <div class="other-account-bubble">
+                    <p class="bubble-text">{{ m.text }}</p>
+                </div>
+            </div>
+        {% endif %}
+        {% endfor %}
+        
+    </div>
+
+    <form method="post" class="message-input-bar">
+        {% csrf_token %}
+        <input type="text" name="text" placeholder="Type a message..." class="message-input">
+        <button type="submit" class="message-send-btn">Send</button>
+    </form>
+</div>
+
+<style>
+    .container {
+        display: block;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px 10px;
+        border-radius: 20px;
+        background-color: #273248;
+
+        
+        h1 {
+            margin-left: 20px;
+        }
+    }
+    
+    .conversation-board {
+        background-color: #1c1c1c;
+        border-radius: 10px;
+        padding: 16px;
+        height: 50vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex-wrap: nowrap;
+    }
+
+    .bubble-box {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .bubble-box-other {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .driver-bubble,
+    .other-account-bubble {
+        max-width: 70%;
+        padding: 10px 14px;
+        border-radius: 18px;
+        margin: 3px;
+    }
+
+    .driver-bubble {
+        align-self: flex-end;
+        background-color: #2563eb;
+        color: white;
+        border-bottom-right-radius: 4px; /* make the chat bubble style for the container */
+        max-width: 40%;
+    }
+
+    .bubble-container {
+        display:flex;
+        gap:8px;
+        align-items: center;
+    }
+
+    .other-account-bubble {
+        align-self: flex-start; 
+        background-color: #c1c5ce;
+        color: #111827;
+        border-bottom-left-radius: 4px;
+        max-width: 40%;
+
+    }
+
+    .bubble-text {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        word-wrap: break-word;
+    }
+
+    .bubble-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    }
+
+    .bubble-avatar-other {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+
+    .message-input-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 12px;
+        padding: 20px 10px 8px 10px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .message-input {
+        flex: 1;
+        padding: 8px 10px;
+        border-radius: 999px;
+        border: 1px solid #d1d5db;
+        font-size: 0.95rem;
+        outline: none;
+    }
+
+    .message-input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+    }
+
+    .message-send-btn {
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: none;
+        font-size: 0.95rem;
+        cursor: pointer;
+        background: #2563eb;
+        color: white;
+        font-weight: 500;
+    }
+
+    .message-send-btn:hover {
+        opacity: 0.9;
+    }
+
+
+</style>
+
+{% endblock %}

@@ -190,8 +190,9 @@ class DirectMessage(models.Model):
 
 class Message(models.Model):
     conversation = models.ForeignKey(DirectMessage, on_delete=models.CASCADE, related_name="messages")
-    sender = models.ForeignKey("Driver", on_delete=models.CASCADE, related_name="sent_messages")
-    
+    sender = models.ForeignKey("Driver", on_delete=models.CASCADE, related_name="sent_messages", default=None)
+    receiver = models.ForeignKey("Driver", on_delete=models.CASCADE, related_name="received_messages", default=None)
+
     text = models.TextField(max_length=300)
     created = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
