@@ -1,5 +1,5 @@
 # partout/views.py
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, View
 from django.db.models import Count, Q
 from django.urls import reverse
 from django.shortcuts import redirect
@@ -156,8 +156,8 @@ class MessagesView(ListView):
             }
             context["offers"] = (Offer.objects.all())
 
-        return context
 
+        return context
 
 class ConversationView(DetailView):
     template_name = "partout/conversation.html"
@@ -218,6 +218,44 @@ class ConversationView(DetailView):
 
 
 
+class StartConvoView(View):
+    def get_current_driver(self):
+        """
+        maps the logged in user to the Driver.
+        """
+        user = self.request.user
+        if not user.is_authenticated:
+            return None
+
+        try:
+            return Driver.objects.get(email=user.email)
+        except Driver.DoesNotExist:
+            return None
+    
+    def post(self, request, *args, **kwargs):
+        current_driver = self.get_current_driver()
+        if current_driver is None:
+            return redirect("home")
+
+
+        other_id = request.POST.get("other_driver_id")
+        if not other_id:
+            return redirect("messages")
+        other_driver = Driver.objects.get(pk=other_id)
+        
+        existing_dm = DirectMessage.objects.filter(participants=current_driver).filter(participants=other_driver).first()
+
+        if existing_dm is not None:
+            dm = existing_dm
+
+        dm = DirectMessage.objects.create()
+        dm.participants.add(current_driver, other_driver)
+
+        return redirect("conversation_detail", pk=dm.pk)
+    
+    def get(self, request, *args, **kwargs):
+        return redirect("messages")
+
 
 class ProfileView(DetailView):
     template_name = "partout/profile.html"
@@ -267,12 +305,17 @@ class ProfileView(DetailView):
         
         avgRating = round(avgRating, 1)
 
+        followers = Follow.get_num_followers(driver)
+        following = Follow.get_num_following(driver)
+
         context["stats"] = {
             "total_listings": driver.listings.count(),
             "active_listings": driver.listings.filter(status="active").count(),
             "total_cars": driver.cars.count(),
             "saved_count": driver.saved_listings.count(),
-            "rating": avgRating
+            "rating": avgRating,
+            "followers": followers,
+            "following": following,
         }
 
         return context

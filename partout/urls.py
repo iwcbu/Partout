@@ -14,6 +14,7 @@ urlpatterns = [
     path("/profile/<int:pk>", ProfileView.as_view(), name="profile"),
 
     path("/messages", MessagesView.as_view(), name="messages"),
+    path("/messages/new", StartConvoView.as_view(), name="start_convo"),
     path("/messages/conversation/<int:pk>", ConversationView.as_view(), name="conversation"),
 
 ]

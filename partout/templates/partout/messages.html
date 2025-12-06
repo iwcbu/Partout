@@ -40,10 +40,25 @@
         </div>
     </section>
 
-    <!-- SECTION 2: Direct Messages -->
     <section class="directMessages">
         <div class="widget">
-            <h3>Messages</h3>
+            <div class="heading-container">
+                <h3>Messages</h3>
+                <form method="post" action="{% url 'start_convo' %}">
+                {% csrf_token %}
+
+                <select name="other_driver_id">
+                    {% for d in drivers %}
+                        {% if d != driver %}
+                            <option value="{{ d.id }}">
+                                {{ d.first_name }} {{ d.last_name }}
+                            </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+
+                <button type="submit">New Convo</button>
+            </div>
 
             {% if conversations %}
                 {% for convo in conversations %}

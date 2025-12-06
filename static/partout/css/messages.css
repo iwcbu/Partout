@@ -42,6 +42,16 @@
   color: #111827;
 }
 
+.heading-container {
+  display: flex;
+  flex-direction: row;
+
+  button {
+    justify-self: flex-end;
+  }
+}
+
+
 /* =========================
    Message cards
    ========================= */

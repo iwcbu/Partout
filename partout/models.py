@@ -15,6 +15,59 @@ class Driver(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+
+
+class Follow(models.Model):
+    '''contains a profiles follow/following data'''
+
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='driver')
+    driver_that_followed = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='driver_that_followed')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        '''string representation of follow model'''
+
+        return f'{self.driver_that_followed} follows {self.driver}' 
+    
+
+
+    def get_followers(driver):
+        '''Returns list of profiles that follow a profile'''
+
+        followers = Follow.objects.filter(driver=driver) # returns query list of follow relationships following profile
+
+        # turns query list into list
+        return list(followers)
+    
+    def get_followers_qs(driver):
+        '''returns a queryset of profiles that follow a profile'''
+
+        return Driver.objects.filter(driver_that_follows__driver=driver)
+    
+
+    def get_num_followers(driver):
+        '''Returns number of followers'''
+
+        return Follow.objects.filter(driver=driver).count()
+    
+
+
+    def get_following(driver):
+        '''Returns list of profiles that a profile follows'''
+
+        follows = Follow.objects.filter(driver_that_followed=driver) # returns query list of follow relationships that a profile follows
+
+        # querylist to list
+        return list(follows)
+    
+    def get_num_following(driver):
+        '''Returns number of profiles a profile follows'''
+
+        return Follow.objects.filter(driver_that_followed=driver).count()
+    
+
+
 
 
 class Car(models.Model):
