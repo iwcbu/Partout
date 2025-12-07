@@ -1,9 +1,15 @@
 # partout/views.py
-from django.views.generic import TemplateView, ListView, DetailView, View
-from django.db.models import Count, Q
-from django.urls import reverse
-from django.shortcuts import redirect
+
 from .models import *
+from .forms import *
+
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Q
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.views.generic import TemplateView, ListView, DetailView, View, CreateView, UpdateView, DeleteView
 
 
 class HomeView(TemplateView):
@@ -319,3 +325,47 @@ class ProfileView(DetailView):
         }
 
         return context
+    
+
+class CreateProfileView(CreateView):
+    '''defines a view class to create a driver profile'''
+
+    model = Driver
+    fields = ['first_name', 'last_name', 'username', 'email', "city", "state", "zip_code", "profile_image", "bio"]
+    template_name = 'partout/create_profile_form.html'
+
+
+    def get_context_data(self, **kwargs):
+        '''gets context data for a view'''
+        context = super().get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            userForm = UserCreationForm(self.request.POST)
+            profileForm = CreateProfileForm(self.request.POST, self.request.FILES)
+        else:
+            userForm = UserCreationForm()
+            profileForm = CreateProfileForm()
+
+
+        context['userForm'] = userForm
+        context['profileForm'] = profileForm
+        return context
+    
+    def form_valid(self, form):
+        '''Takes a successful form and submits the data to the database'''
+
+        userForm = UserCreationForm(self.request.POST)
+        if userForm.is_valid():
+            user = userForm.save()
+            login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+            form.instance.user = user
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
+        
+    def get_success_url(self):
+        user = self.request.user
+        driver = Driver.objects.get(user=user)
+
+        return reverse('profile', kwargs={'pk': driver.pk})
+ 
+        

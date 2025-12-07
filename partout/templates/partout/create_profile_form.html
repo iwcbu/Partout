@@ -1,0 +1,174 @@
+<!-- mini_insta/templates/mini_insta/create_profile_form.html -->
+
+{% extends 'partout/base.html' %}
+
+{% block content %}
+
+
+<h1 id="titleCreateProfile">Create Profile</h1>
+<div id="container">
+    <form action="{% url 'create_profile' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <fieldset class="fieldset">
+            <legend class="legend">Login Information</legend>
+            
+            <table>
+                <div class="form-group">
+                    <label for="id_first_name">First name</label>
+                    {{ profileForm.first_name }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_last_name">Last name</label>
+                    {{ profileForm.last_name }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_email">Email</label>
+                    {{ profileForm.email }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    {{ userForm.username }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    {{ userForm.password1 }}
+                     <small class="helptext">
+                        {{ userForm.password1.help_text|safe }}
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_password_confirmation">Password Confirmation</label>
+                    {{ userForm.password2 }}
+                </div>
+
+            </table>
+        </fieldset>
+        <br><br>
+        <fieldset class="fieldset">
+            
+            <legend class="legend">Profile Customization</legend>
+                <div class="form-group">
+                    <label for="id_city">City</label>
+                    {{ profileForm.city }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_state">State</label>
+                    {{ profileForm.state }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_zip_code">Zip Code</label>
+                    {{ profileForm.zip_code }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_profile_image">Profile Image</label>
+                    {{ profileForm.profile_image }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_bio">Bio</label>
+                    {{ profileForm.bio }}
+                </div>
+
+        </fieldset>
+
+            
+        <div class="button-container">
+            <input type="submit" name="submit" class="submit-button">
+            <a href="{% url 'market' %}" class="cancel-button">cancel</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .container {
+        display: block;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 20px 10px;
+        border-radius: 20px;
+        background-color: #273248;
+    }
+
+    .fieldset {
+        border-radius: 15px;
+
+        table {
+            padding: 20px;
+        }
+    }
+
+    .legend {
+        margin-left: 30px;
+        letter-spacing: 1.5px;
+
+        font-size: larger;
+        font-weight: bolder;
+        padding: 20px;
+    }
+
+    .button-container {
+        margin-top: 40px;
+        margin-bottom: 20px;
+
+        display: flex;
+        gap: 100px;
+        justify-content: space-evenly;
+    }
+
+    .submit-button {
+        padding: 10px 20px;
+        background-color: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1em;
+        cursor: pointer;
+
+    }
+
+    .cancel-button {
+        padding: 10px 20px;
+        background-color: #ccc;
+        color: #333;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 1em;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        margin-left: 15px;
+        display: flex;
+        flex-direction: column;
+        
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        
+        input,
+        textarea {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+    
+
+</style>
+
+{% endblock %}
