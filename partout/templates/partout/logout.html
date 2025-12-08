@@ -1,0 +1,29 @@
+<!-- mini_insta/templates/mini_insta/logout.html -->
+
+{% extends 'partout/base.html' %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<div class="auth-box">
+    <div class="auth-card">
+        <h3 class="logout-message">Are you lost?</h3>
+        <a href="{% url 'market' %}" style="text-decoration: none;" class="auth-button">Back to Market</a>
+    </div>
+</div>
+
+{% else %}
+
+<div class="auth-box">
+    <div class="auth-card">
+        <h3 class="auth-message">Successfully logged out of Partout.</h3>
+        <div style="display:flex; gap: 20px; padding: 10px;">
+            <a href="{% url 'login' %}?next={% url 'market' %}" style="text-decoration: none;" class="authButton">Back to login</a>
+            <a href="{% url 'market' %}" style="text-decoration: none;" class="auth-button">Show the Market</a>
+        </div>
+            
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

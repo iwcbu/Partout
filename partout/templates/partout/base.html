@@ -19,10 +19,43 @@
         <header>
             <nav class="navBar">
                 <ul class="navList">
-                    <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'market' %}">Market</a></li>
-                    <li><a href="{% url 'profile' 1 %}">Profile</a></li>
-                    <li><a href="{% url 'messages' %}">Messages</a></li>
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.driver %}
+                            <li><a href="{% url 'home' %}">Home</a></li>
+                            <li><a href="{% url 'profile' request.user.driver.pk %}">Profile</a></li>
+                            <li><a href="{% url 'messages' %}">Messages</a></li>
+                        {% endif%}
+             
+                        {% url 'login' as login_url %} <!-- assign login url as login_url -->
+                        {% if request.path != login_url %} <!-- show if we aren't on the login page -->
+                        <li style="display: flex; flex-direction: column;color: white;">{{ request.user.driver.username }}
+                            <form action="{% url 'logout' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="submit" value="Logout">
+                            </form>
+                        </li>
+                        {% else %}
+                            {% url 'create_profile' as create_profile_url %}
+                            {% if request.path != create_profile_url %}
+                            <li><a href="{% url 'create_profile' %}">Create Profile</a></li>
+                            {% endif %}
+                        {% endif %}
+
+                    {% else %}
+                            {% url 'logout' as logout_url %} <!-- assign login url as logout_url -->
+                            {% url 'logout_confirmation' as logout_url2 %} <!-- logout_confirmation url as logout_url2 -->
+                            {% url 'login' as login_url %} <!-- assign login url as login_url -->
+                            {% if request.path != logout_url and request.path != logout_url2 and request.path != login_url %} <!-- show if we aren't on the logout page -->
+                            <!-- redirect to login, putting the next path in the url to get from the login page -->
+                            <li><a href="{% url 'login' %}">Login</a></li>
+                            {% endif %}                            
+                            
+                            {% url 'create_profile' as create_profile_url %}
+                            {% if request.path != create_profile_url %}
+                            <li><a href="{% url 'create_profile' %}">Create Profile</a></li>
+                            {% endif %}
+                    {% endif %}
                 </ul>
             </nav>
         </header>

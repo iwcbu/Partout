@@ -1,8 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 
 class Driver(models.Model):
+    '''contains driver model data'''
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=30, unique=True)
@@ -12,6 +15,7 @@ class Driver(models.Model):
     zip_code = models.CharField(max_length=10)
     profile_image = models.ImageField(upload_to="drivers/profile_images/", blank=True, null=True)
     bio = models.TextField(blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True) # auth
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -71,6 +75,7 @@ class Follow(models.Model):
 
 
 class Car(models.Model):
+    '''contains car model data'''
     drivetrain_choices = [
         ("FWD", "FWD"),
         ("RWD", "RWD"),
@@ -115,6 +120,8 @@ class Car(models.Model):
 
 
 class Listing(models.Model):
+    '''contains listing model data'''
+
     condition_choices = [
         ("new", "New"),
         ("like_new", "Like New"),
@@ -160,10 +167,12 @@ class Listing(models.Model):
     status = models.CharField(max_length=10, choices=status_choices, default="na")
 
     def __str__(self):
+        '''string representation of model'''
         return f'{self.title} ~ {self.seller} (${self.price})'
 
 
 class Comment(models.Model):
+    '''contains comment model data'''
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="comments")
     
@@ -175,6 +184,7 @@ class Comment(models.Model):
 
 
 class Like(models.Model):
+    '''contains like model data'''
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="likes")
     user = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="likes" )
     
@@ -188,6 +198,7 @@ class Like(models.Model):
 
 
 class SavedListing(models.Model):
+    '''contains saved listing model data'''
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="saved_by")
     user = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="saved_listings")
     
@@ -201,6 +212,7 @@ class SavedListing(models.Model):
 
 
 class Offer(models.Model):
+    '''contains offer model data'''
     status_choices = [
         ("pending", "Pending"),
         ("accepted", "Accepted"),
@@ -209,6 +221,7 @@ class Offer(models.Model):
 
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="offers")
     buyer = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="offers_made")
+
     
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
@@ -221,6 +234,8 @@ class Offer(models.Model):
 
 
 class DirectMessage(models.Model):
+    '''contains dm model data'''
+
     participants = models.ManyToManyField("Driver", related_name="directmessage")
     listing = models.ForeignKey(
         "Listing", on_delete=models.CASCADE, related_name="directmessage",
@@ -242,19 +257,22 @@ class DirectMessage(models.Model):
         return f"Chat between {names}"
 
 class Message(models.Model):
+    '''contains message model data'''
+
     conversation = models.ForeignKey(DirectMessage, on_delete=models.CASCADE, related_name="messages")
     sender = models.ForeignKey("Driver", on_delete=models.CASCADE, related_name="sent_messages", default=None)
     receiver = models.ForeignKey("Driver", on_delete=models.CASCADE, related_name="received_messages", default=None)
 
     text = models.TextField(max_length=300)
     created = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)
-    
+        
     def __str__(self):
         return f"Message from {self.sender} in {self.conversation}"
     
 
 class Rating(models.Model):
+    '''contains rating model data'''
+
     rater = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="ratings_given" )
     rating_receiver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="ratings_received")
     rating = models.DecimalField(max_digits=1, decimal_places=0)

@@ -13,11 +13,11 @@
     <h3><- Back to messages </h3>
 </a>
 <div class="container">
-    <h1 style="color: rgb(205, 205, 205)"> 
+    <h1> 
         {% for p in participants %}
             {% if p == driver %}
             {% else %}
-                {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %}, {% endif %}
+                {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %} {% endif %}
             {% endif %}
         {% endfor %}
     </h1>
@@ -61,14 +61,16 @@
 <style>
     .container {
         display: block;
-        max-width: 900px;
+        max-width: 700px;
         margin: 0 auto;
         padding: 20px 10px;
         border-radius: 20px;
-        background-color: #273248;
+        border: 2px black solid;
+        background-color: #e7e7e7;
 
         
         h1 {
+            color:black;
             margin-left: 20px;
         }
     }
@@ -78,11 +80,13 @@
         border-radius: 10px;
         padding: 16px;
         height: 50vh;
+        max-width: 600px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
         gap: 10px;
         flex-wrap: nowrap;
+        margin: 0 auto;
     }
 
     .bubble-box {

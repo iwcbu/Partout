@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView, View, CreateView, UpdateView, DeleteView
 
 
-class HomeView(TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "partout/home.html"
 
     def get_current_driver(self):
@@ -118,7 +118,7 @@ class ListingView(DetailView):
     context_object_name = ""
 
 
-class MessagesView(ListView):
+class MessagesView(LoginRequiredMixin, ListView):
     model = DirectMessage
     template_name = "partout/messages.html"
     context_object_name = "conversations"
@@ -132,7 +132,7 @@ class MessagesView(ListView):
             return None
 
         try:
-            return Driver.objects.get(email=user.email)
+            return Driver.objects.get(user=user)
         except Driver.DoesNotExist:
             return None
 
@@ -143,7 +143,7 @@ class MessagesView(ListView):
 
         return (
             DirectMessage.objects.filter(participants=driver)
-            .prefetch_related("participants", "listing")
+            .prefetch_related("participants")
             .order_by("-updated", "-created")
         )
 
@@ -153,19 +153,13 @@ class MessagesView(ListView):
         context["current_driver"] = driver
 
         if driver:
-
-            # unread counts per conversation
-            unread_by_convo = (Message.objects.filter(conversation__participants=driver,is_read=False).exclude(sender=driver).values("conversation_id").annotate(count=Count("id")))
-
-            context["unread_counts"] = {
-                item["conversation_id"]: item["count"] for item in unread_by_convo
-            }
-            context["offers"] = (Offer.objects.all())
+            context["offers"] = Offer.objects.filter(listing__seller=driver)
+            context["followers"] = Follow.get_followers(driver)
 
 
         return context
 
-class ConversationView(DetailView):
+class ConversationView(LoginRequiredMixin, DetailView):
     template_name = "partout/conversation.html"
     model = DirectMessage
 
@@ -178,7 +172,7 @@ class ConversationView(DetailView):
             return None
 
         try:
-            return Driver.objects.get(email=user.email)
+            return Driver.objects.get(user=user)
         except Driver.DoesNotExist:
             return None
 
@@ -224,7 +218,7 @@ class ConversationView(DetailView):
 
 
 
-class StartConvoView(View):
+class StartConvoView(LoginRequiredMixin, View):
     def get_current_driver(self):
         """
         maps the logged in user to the Driver.
@@ -263,7 +257,7 @@ class StartConvoView(View):
         return redirect("messages")
 
 
-class ProfileView(DetailView):
+class ProfileView(LoginRequiredMixin, DetailView):
     template_name = "partout/profile.html"
     model = Driver
     context_object_name = "driver"

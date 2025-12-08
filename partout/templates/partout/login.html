@@ -1,0 +1,40 @@
+<!-- mini_insta/templates/mini_insta/login.html -->
+
+{% extends 'partout/base.html' %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<div class="auth-box">
+    <div class="auth-card">
+        <h3 class="logout-message">Are you lost?</h3>
+        <a href="{% url 'market' %}" style="text-decoration: none;" class="auth-button">Back to Market</a>
+        
+    </div>
+</div>
+
+{% else %}
+
+<div class="auth-box">
+    <div class="auth-card">
+        <h3 class="auth-message">Login to Partout</h3>
+        <div style="padding: 10px;">
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <table class="auth-table">
+                    {{ form.as_table }}
+                </table>
+                <div style="display: flex; gap: 40px; justify-content: center; align-items:baseline;">
+                    <input type="submit" value="Login" class="auth-button">
+                    <input type="hidden" name="next" value="{% url 'home' %}"> 
+                    
+                    <a href="{% url 'market' %}" id="cancel-button" style="max-height: fit-content;">cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+
+{% endblock %}

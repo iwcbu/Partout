@@ -1,18 +1,19 @@
 # partout/urls.py
 
-from django.urls import path
 from .views import *
+from django.contrib.auth import views as auth_views # generic view for auth
+from django.urls import path
 
 
 urlpatterns = [
-
-    # home
-    path("", HomeView.as_view(), name="home"),
-    path("/home", HomeView.as_view(), name="home"),
-
     # market
+    path("", MarketView.as_view(), name="market"),
     path("/market", MarketView.as_view(), name="market"),
     path("/market/listing/<int:pk>", ListingView.as_view(), name="listing"),
+
+    # home
+    path("/home", HomeView.as_view(), name="home"),
+
 
     # profile
     path("/profile/<int:pk>", ProfileView.as_view(), name="profile"),
@@ -31,6 +32,12 @@ urlpatterns = [
     # path('profile/<int:pk>/delete_follow', FollowView.as_view(), name='delete_follow'),
     # path('post/<int:pk>/like', LikeView.as_view(), name='like'),
     # path('post/<int:pk>/delete_like', LikeView.as_view(), name='delete_like'),
+
+     # auth
+    path('/login', auth_views.LoginView.as_view(template_name='partout/login.html'), name='login'),
+    path('/logout', auth_views.LogoutView.as_view(next_page='logout_confirmation'), name='logout'),
+    path('/logged_out', TemplateView.as_view(template_name='partout/logout.html'), name='logout_confirmation'),
+
 
 
 ]

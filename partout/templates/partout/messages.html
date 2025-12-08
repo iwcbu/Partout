@@ -48,7 +48,7 @@
                 {% csrf_token %}
 
                 <select name="other_driver_id">
-                    {% for d in drivers %}
+                    {% for d in follower %}
                         {% if d != driver %}
                             <option value="{{ d.id }}">
                                 {{ d.first_name }} {{ d.last_name }}
@@ -64,7 +64,6 @@
                 {% for convo in conversations %}
                     <a href="{% url 'conversation' convo.pk %}">
                         <div class="messageCard">
-                            {# just grab the first participant's image for now #}
                             {% with p=convo.participants.first %}
                                 {% if p and p.profile_image %}
                                     <img src="{{ p.profile_image.url }}" alt="profile picture">
