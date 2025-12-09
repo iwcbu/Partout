@@ -88,7 +88,7 @@
                 </h3>
                 <p class="profileGarage-tagline">{{ car.ownership_type }}
                     {% if request.user == driver.user %}
-                        <a href="{% url 'delete_car' car.pk %}" style="float: inline-end; font-weight: bolder;">
+                        <a href="{% url 'update_car' car.pk %}" style="float: inline-end; font-weight: bolder;">
                             <p style="color: #0a5aaa;">Update</p>
                         </a>    
                     {% endif %}

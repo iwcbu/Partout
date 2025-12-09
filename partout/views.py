@@ -16,9 +16,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "partout/home.html"
 
     def get_current_driver(self):
-        """
-        maps the logged in user to the Driver.
-        """
+        """ maps the logged in user to the driver """
         user = self.request.user
         if not user.is_authenticated:
             return None
@@ -30,12 +28,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
 
     def get_context_data(self, **kwargs):
-        '''        
-        recent_listings - Newest active listings
-        
-        popular_listings - "Popular" listings by like count
-
-        '''
+        ''' returns context data related to home views needs'''
 
         context = super().get_context_data(**kwargs)
 
@@ -45,25 +38,32 @@ class HomeView(LoginRequiredMixin, TemplateView):
             context["messages"] = Message.objects.filter(receiver=driver).order_by("-created")[:3]
 
         context["recent_listings"] = (
-            Listing.objects.filter(status="active")
-            .select_related("seller", "car")
-            .order_by("-created")[:3]
+            Listing.objects.filter(status="Active")
+                           .order_by("-created")[:4]
         )
 
-        context["popular_listings"] = (Listing.objects.filter(status="active").annotate(num_likes=Count("likes")).select_related("seller", "car").order_by("-num_likes", "-created")[:8])
+        context["saved_listings"] = (
+            SavedListing.objects.filter(driver=driver)
+                                .order_by("-created")
+        )
 
         return context
 
 
 class MarketView(ListView):
+    '''View that displays the current market and user's listings'''
+
+
     model = Listing
     template_name = "partout/market.html"
     context_object_name = "listings"
     paginate_by = 12
 
     def get_queryset(self):
+        '''gets all active listings given the parameters of the search'''
+
         qs = (
-            Listing.objects.filter(status="active")
+            Listing.objects.filter(status="Active")
             .select_related("seller", "car")
             .order_by("-created")
         )
@@ -93,6 +93,8 @@ class MarketView(ListView):
         return qs
 
     def get_context_data(self, **kwargs):
+        '''returns context data related to the market view'''
+        
         context = super().get_context_data(**kwargs)
 
         # Choices for filters (for dropdowns in the template)
@@ -122,21 +124,24 @@ class ListingView(DetailView):
 
     def get_context_data(self, **kwargs):
         '''gets context data related to listings'''
+
         context = super().get_context_data(**kwargs)
         likes = self.object.get_likes()
-        comments = self.object.get_all_comments()
+        saves = self.object.get_saves()
 
         context['photo'] = self.object.image
-        context['comments'] = comments
         context['likes'] = likes
+        context['saves'] = saves
 
         if self.request.user.is_authenticated:
             driver = self.request.user.driver
+
             context['liked_by_user'] = likes.filter(driver=driver).exists
+            context['saved_by_user'] = saves.filter(driver=driver).exists
 
         
         return context
-    
+
 
 class CreateListingView(LoginRequiredMixin, CreateView):
     '''View to create listing for a given driver'''
@@ -166,6 +171,38 @@ class CreateListingView(LoginRequiredMixin, CreateView):
 
         return reverse("show_listing", kwargs={ "pk": self.object.pk } )
     
+
+
+
+class UpdateListingView(LoginRequiredMixin, UpdateView):
+    """defines a view class to update a given post"""
+
+    model = Listing
+    form_class = UpdateListingForm
+    template_name = 'partout/update_listing_form.html'
+    context_object_name = 'listing'
+
+    def get_success_url(self):
+        '''returns listing detail view after user finishes updating'''
+
+        return reverse("show_listing", kwargs={"pk": self.object.pk})
+
+
+    def get_context_data(self, **kwargs):
+        '''returns context data required for deleting listing'''
+
+        context = super().get_context_data()
+        pk = self.kwargs['pk']
+        listing = Listing.objects.get(pk=pk)
+        context['listing'] = listing
+        return context 
+    
+    def get_login_url(self):
+        '''return the url for the apps login'''
+        return reverse('login')
+
+
+
 
 
 class DeleteListingView(LoginRequiredMixin, DeleteView):
@@ -226,8 +263,131 @@ class MessageSellerView(LoginRequiredMixin, View):
         
     
 
+class CreateOfferView(LoginRequiredMixin, CreateView):
+    model = Offer
+    form_class = CreateOfferForm
+    template_name = "partout/create_offer_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        pk = self.kwargs["listing_pk"]
+        context["listing_pk"] = pk
+
+        return context
+
+
+    def form_valid(self, form):
+        ''' link the current user to the buyer
+            link the current listing to the offer '''
+        driver = self.request.user.driver
+
+        pk = self.kwargs["listing_pk"]
+        listing = Listing.objects.get(pk=pk)
+
+        form.instance.buyer = driver
+        form.instance.listing = listing
+
+        return super().form_valid(form)
+    
+
+    def get_success_url(self):
+        '''redirects user to the listing after sending an offer'''
+
+        return reverse("show_listing", kwargs={ "pk": self.object.listing.pk } )
+    
+
+
+class AcceptOfferView(LoginRequiredMixin, DeleteView):
+    '''deletes offer object from django db'''
+
+    model = Offer
+    template_name = "partout/accept_offer_form.html"
+
+    def get_context_data(self, **kwargs):
+            '''returns context data required for deleting offer'''
+
+            context = super().get_context_data()
+            pk = self.kwargs['pk']
+            offer = Offer.objects.get(pk=pk)
+            context['offer'] = offer
+
+            return context 
+    
+    def get_login_url(self):
+        '''return the url for the apps login'''
+        return reverse('login')
+
+    def get_success_url(self):
+        '''return the url to redirect to after a successful delete'''
+
+        return reverse('messages')
+    
+
+class DeleteOfferView(LoginRequiredMixin, DeleteView):
+    '''deletes offer object from django db'''
+
+    model = Offer
+    template_name = "partout/delete_offer_form.html"
+
+    def get_context_data(self, **kwargs):
+            '''returns context data required for deleting offer'''
+
+            context = super().get_context_data()
+            pk = self.kwargs['pk']
+            offer = Offer.objects.get(pk=pk)
+            context['offer'] = offer
+
+            return context 
+    
+    def get_login_url(self):
+        '''return the url for the apps login'''
+        return reverse('login')
+
+    def get_success_url(self):
+        '''return the url to redirect to after a successful delete'''
+
+        return reverse('messages')
+  
+
+class MessageOfferBuyerView(LoginRequiredMixin, View):
+    """ Create a conversation for an offer and automatically send 
+        an accept message as the first message"""
+
+    def get(self, request, *args, **kwargs):
+        '''creates convo, automatically sends 'i acccept your offer' message'''
+
+        # get offer, seller, and buyer objects
+        pk = self.kwargs['pk']
+        offer = Offer.objects.get(pk=pk)
+        seller = request.user.driver
+        buyer = offer.buyer
+
+        # create conversation
+        convo = DirectMessage.objects.create()
+        convo.participants.add(seller, buyer)
+
+        # generate accept text from offer info
+        accept_text = f"{seller.username} just accepted your offer of ${offer.amount} on {offer.listing.title}."
+        
+        # delete the offer
+        offer.delete()
+
+        # send a message to the buyer
+        Message.objects.create(
+            conversation = convo,
+            sender = seller,
+            receiver = buyer,
+            text = accept_text,
+        )
+
+        # redirect to the conversation detail view
+        return redirect("conversation", convo.pk)
+
 
 class MessagesView(LoginRequiredMixin, ListView):
+    '''Displays conversations with and offers to the current user'''
+
     model = DirectMessage
     template_name = "partout/messages.html"
     context_object_name = "conversations"
@@ -246,6 +406,8 @@ class MessagesView(LoginRequiredMixin, ListView):
             return None
 
     def get_queryset(self):
+        '''gets query set'''
+
         driver = self.get_current_driver()
         if driver is None:
             return DirectMessage.objects.none()
@@ -257,9 +419,12 @@ class MessagesView(LoginRequiredMixin, ListView):
         )
 
     def get_context_data(self, **kwargs):
+        '''returns the context data for MessagesView'''
+
         context = super().get_context_data(**kwargs)
         driver = self.get_current_driver()
         context["current_driver"] = driver
+
 
         if driver:
             context["offers"] = Offer.objects.filter(listing__seller=driver)
@@ -269,13 +434,13 @@ class MessagesView(LoginRequiredMixin, ListView):
         return context
 
 class ConversationView(LoginRequiredMixin, DetailView):
+    '''Displays the current conversation viewed by the user'''
+
     template_name = "partout/conversation.html"
     model = DirectMessage
 
     def get_current_driver(self):
-        """
-        maps the logged in user to the Driver.
-        """
+        """maps the logged in user to the driver profile"""
         user = self.request.user
         if not user.is_authenticated:
             return None
@@ -286,6 +451,7 @@ class ConversationView(LoginRequiredMixin, DetailView):
             return None
 
     def get_context_data(self, **kwargs):
+        '''returns context data related to Convesrations'''
 
         context =  super().get_context_data(**kwargs)
 
@@ -311,6 +477,8 @@ class ConversationView(LoginRequiredMixin, DetailView):
         return context
     
     def post(self, request, *args, **kwargs):
+        '''submits messages to conversation'''
+
         self.object = self.get_object()
         convo = self.object
         driver = self.get_current_driver()
@@ -336,9 +504,7 @@ class StartConvoView(LoginRequiredMixin, View):
     template_name = 'partout/start_convo_form.html'
 
     def get_current_driver(self):
-        """
-        maps the logged in user to the Driver.
-        """
+        """maps the logged in user to the driver profile"""
         user = self.request.user
         if not user.is_authenticated:
             return None
@@ -396,21 +562,14 @@ class DeleteConvoView(DeleteView):
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
+    '''Displays a detailed view of a profile'''
+
     template_name = "partout/show_profile.html"
     model = Driver
     context_object_name = "driver"
 
     def get_context_data(self, **kwargs):
-        '''  
-        cars - cars in this driver's "garage"
-
-        listings - listings created by this driver
-
-        saved_listings - listings they’ve saved
-
-        stats - quick stats for flexing on their profile page
-
-        '''
+        '''returns context related to the profile view'''
 
         context = super().get_context_data(**kwargs)
         driver = self.object
@@ -424,9 +583,8 @@ class ProfileView(LoginRequiredMixin, DetailView):
         context["listings"] = (Listing.objects.filter(seller=driver).order_by("-created"))
 
         context["saved_listings"] = (
-            SavedListing.objects.filter(user=driver)
-            .select_related("listing__car", "listing__seller")
-            .order_by("-created")
+            SavedListing.objects.filter(driver=driver)
+                                .order_by("-created")
         )
 
         ratings = Rating.objects.filter(rating_receiver=driver)
@@ -476,7 +634,9 @@ class CreateProfileView(CreateView):
 
     def get_context_data(self, **kwargs):
         '''gets context data for a view'''
+
         context = super().get_context_data(**kwargs)
+
         if self.request.method == 'POST':
             userForm = UserCreationForm(self.request.POST)
             profileForm = CreateProfileForm(self.request.POST, self.request.FILES)
@@ -487,21 +647,26 @@ class CreateProfileView(CreateView):
 
         context['userForm'] = userForm
         context['profileForm'] = profileForm
+
         return context
     
     def form_valid(self, form):
         '''Takes a successful form and submits the data to the database'''
 
         userForm = UserCreationForm(self.request.POST)
+
         if userForm.is_valid():
             user = userForm.save()
             login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
             form.instance.user = user
             return super().form_valid(form)
+        
         else:
             return self.form_invalid(form)
         
     def get_success_url(self):
+        '''redirect user to profile view after successfully making a profile'''
+
         user = self.request.user
         driver = Driver.objects.get(user=user)
 
@@ -534,8 +699,11 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
 
 
 class FollowView(TemplateView):
+    '''placement view holding follow relationship logic between driver profiles'''
 
     def get(self, request, *args, **kwargs):
+        '''get'''
+
         user = request.user
 
         if not user.is_authenticated:
@@ -545,12 +713,13 @@ class FollowView(TemplateView):
         try:
             pk = kwargs['pk']
             driver = Driver.objects.get(pk=pk)
-        except Driver.DoesNotExist: # missing posts or network error
+        except Driver.DoesNotExist: # missing driver rofile or network error
             from django.http import Http404
             raise Http404("Profile not found")
         
         userProfile = user.driver
         action = request.GET.get("action", "follow")
+
         if action == "follow":
             Follow.objects.create(driver=driver, driver_that_followed=userProfile)
         else:
@@ -562,6 +731,8 @@ class FollowView(TemplateView):
 
 
 class AddCarView(CreateView):
+    '''view for adding a car to a users garage'''
+
     model = Car
 
     fields = [
@@ -595,6 +766,36 @@ class AddCarView(CreateView):
 
         return reverse("show_profile", kwargs={ "pk": driver.pk } )
     
+
+
+
+ 
+class UpdateCarView(LoginRequiredMixin, UpdateView):
+    """defines a view class to update a driver's car"""
+
+    model = Car
+    form_class = UpdateCarForm
+    template_name = 'partout/update_car_form.html'
+
+    def get_object(self):
+        '''returns car'''
+
+        cpk = self.kwargs["pk"]
+        car = Car.objects.get(pk=cpk)
+        return car
+    
+    def get_success_url(self):
+        '''on successful submission, show user their updated car in their garage'''
+
+        car = self.get_object()
+
+        return reverse('show_profile', kwargs={'pk': car.owner.pk})
+    
+
+    def get_login_url(self):
+        '''return the url for the apps login'''
+        return reverse('login')
+
 
 
 
@@ -636,3 +837,62 @@ class DeleteCarView(DeleteView):
         #return url to redirect to
         return reverse('show_profile', kwargs={'pk': driver.pk})
     
+
+
+
+class LikeView(TemplateView):
+
+    model = Listing
+    
+    def get(self, request, *args, **kwargs):
+        user = request.user
+
+        if not user.is_authenticated:
+            return redirect('login')
+        
+
+        try:
+            pk = kwargs['pk']
+            listing = Listing.objects.get(pk=pk)
+        except listing.DoesNotExist:
+            from django.http import Http404
+            raise Http404("Post not found")
+        
+        driver = user.driver
+        action = request.GET.get("action", "like")
+        if action == "like":
+            Like.objects.create(listing=listing, driver=driver)
+        else:
+            Like.objects.filter(listing=listing, driver=driver).delete()
+        
+        return redirect('show_listing', pk=listing.pk)
+        
+
+class SaveView(TemplateView):
+    '''handles logic for saving listings'''
+
+    model = SavedListing
+    
+    def get(self, request, *args, **kwargs):
+        user = request.user
+
+        if not user.is_authenticated:
+            return redirect('login')
+        
+
+        try:
+            pk = kwargs['pk']
+            listing = Listing.objects.get(pk=pk)
+        except listing.DoesNotExist: 
+            from django.http import Http404
+            raise Http404("Post not found")
+        
+        driver = user.driver
+        action = request.GET.get("action", "save")
+        if action == "save":
+            SavedListing.objects.create(listing=listing, driver=driver)
+        else:
+            SavedListing.objects.filter(listing=listing, driver=driver).delete()
+        
+        return redirect('show_listing', pk=listing.pk)
+        

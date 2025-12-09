@@ -28,7 +28,16 @@
                                     ({{ offer.get_status_display }})
                                 </p>
                             </div>
+                            <div class="button-box">
+                                <a href="{% url 'accept_offer' offer.pk %}">
+                                    <p style="color: green;">Accept</p>
+                                </a> 
+                                <a href="{% url 'delete_offer' offer.pk %}">
+                                    <p style="color: darkred;">Decline</p>
+                                </a> 
+                            </div>
                         </div>
+
                 {% endfor %}
             {% else %}
                 <p>You don't have any offers yet.</p>
@@ -42,31 +51,31 @@
                 <h3>Messages
                 </h3>
                 
-            </div>
-            <div>
-                <a href="{% url 'start_convo' %}" class="new-convo-button">New Convo</a>
+                <div style="margin-left:auto; align-content: end;">
+                    <a href="{% url 'start_convo' %}" class="new-convo-button">New Convo</a>
+                </div>
             </div>
             
             {% if conversations %}
                 {% for convo in conversations %}
                 <div class="messageCard">
                         <a href="{% url 'conversation' convo.pk %}">
-                                <div>
-                                    
-                                {% with p=convo.participants.first %}
-                                    {% if p %}
-                                        {% if p.profile_image %}
-                                        <img src="{{ p.profile_image.url }}" alt="profile picture">
-                                        {% else %}
-                                        <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture">
+                            <div>
+                                    {% for p in convo.participants.all %}
+                                        {% if p.pk != request.user.driver.pk %}
+                                            {% if p.profile_image %}
+                                                <img src="{{ p.profile_image.url }}" alt="profile picture">
+                                            {% else %}
+                                                <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture">
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
-                                {% endwith %}
-
+                                    {% endfor %} 
                                 <div class="messageInfo">
                                     <h4>
                                         {% for p in convo.participants.all %}
-                                            {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %}, {% endif %}
+                                            {% if p.pk != request.user.driver.pk %}
+                                                {{ p.first_name }} {{ p.last_name }}
+                                            {% endif %}
                                         {% endfor %}
                                     </h4>
 
@@ -75,8 +84,8 @@
                                         {{ convo.updated|date:"M j, g:i a" }}
                                     </p>
                                 </div>
-                            </a>   
-                        </div> 
+                            </div> 
+                        </a>   
                         <a href="{% url 'delete_convo' convo.pk %}" style="margin-left: auto;">
                             <p style="color: darkred;">Remove</p>
                         </a>   

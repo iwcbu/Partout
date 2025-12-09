@@ -1,0 +1,115 @@
+/* django/static/partout/css/update_profile_form.css */
+
+
+/* =========================
+   Update Profile Page Layout
+   ========================= */
+
+.title {
+    width: 80%;
+    margin: 1.5rem auto 0.75rem;
+    font-size: 1.4rem;
+    font-weight: 650;
+    text-align: left;
+    color: #111827;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto 2rem;
+    background: #f9fafb;
+    border-radius: 18px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+    border: 2px solid #e5e7eb;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+.table th,
+.table td {
+    padding: 0.4rem 0.6rem;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+.table th {
+    text-align: right;
+    color: #4b5563;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.table td {
+    text-align: left;
+}
+
+.container input[type="text"],
+.container input[type="file"],
+.container textarea,
+.container select {
+    width: 100%;
+    padding: 0.45rem 0.55rem;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 0.9rem;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.container textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.container input:focus,
+.container textarea:focus,
+.container select:focus {
+    border-color: #0a5aaa;
+    box-shadow: 0 0 0 1px rgba(10, 90, 170, 0.15);
+}
+
+.button-box {
+    display: flex;
+    padding: 20px;
+    gap: 30px;
+}
+
+.submit-button,
+.cancel-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .4rem 1.4rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.submit-button {
+    background: #0a5aaa;
+    color: #ffffff;
+    border-color: #0a5aaa;
+}
+
+.submit-button:hover {
+    background: #08497f;
+    border-color: #08497f;
+}
+
+.cancel-button {
+    background: #ffffff;
+    color: #4b5563;
+    border-color: #d1d5db;
+}
+
+.cancel-button:hover {
+    background: #f3f4f6;
+}

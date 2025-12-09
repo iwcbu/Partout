@@ -19,6 +19,8 @@
   .widgetLong {
     grid-column: 1 / -1;
   }
+
+
 }
 
 .widget,
@@ -149,6 +151,10 @@
   .widgetLong {
     padding: 1.5rem;
   }
+
+  .saved-listing-msg {
+    margin-top: 0;
+  }
 }
 
 
@@ -176,4 +182,10 @@
 .home-link-button:hover {
     background: #08497f;
     border-color: #08497f;
+}
+
+
+.saved-listing-msg {
+  text-align: center;
+  font-size: medium;
 }

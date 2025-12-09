@@ -42,37 +42,32 @@
     </div>
    
     <div class="widget">
-        <h3>Recent Activity</h3>
-        {% if messages %}
-        
-            {% for m in messages %}
-                <a href="{% url 'conversation' m.conversation.pk %}">
-
+        <h3>Saved Listings</h3>
+            {% if saved_listings %}
+                {% for save in saved_listings %}
+                <a href="{% url 'show_listing' save.listing.pk %}">
                     <div class="messageCard">
-                        {% if m.sender.profile_image %}
-                        <img src="{{ m.sender.profile_image.url }}" alt="profile picture">
+                        {% if save.listing.image %}
+                        <img src="{{ save.listing.image.url }}" alt="car part">
                         {% else %}
-                        <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture">
+                        <img src="{% static 'partout/img/default_car' }" alt="car, image not available">
                         {% endif %}
-                        <h4>{{ m.sender.first_name }}</h4>
-                        {% if not m.is_read %} 
-                        <p style="font-weight: bolder;">{{ m.text|slice:30 }} {% if m.text.length > 30 %}...{% endif %}</p>
-                        {% else %}
-                        <p>{{ m.text|slice:30 }}{% if m.text.length > 30 %}...{% endif %}</p>
-                        {% endif %}
+                        <div>
+                            <h4>{{ save.listing.title|slice:15}}</h4>
+                            <p>{{ save.listing.description|slice:30 }}{% if save.listing.description|length > 30 %}...{% endif %}</p>
+                        </div>
+
                     </div>
                 </a>
                 {% endfor %}
-        {% endif %}
-
-        
-        <a href="{% url 'messages' %}" class="home-link-button">See Conversations</a>
-
+            {% else %}  
+                <h3 class="saved-listing-msg">No listings saved yet, go shopping!</h3>
+            {% endif %}
     </div>
    
     <!-- recent listings based on garage -->
     <div class="widgetLong">
-        <h3>Recent Listings</h3>
+        <h3>Active Listings</h3>
         <div class="listingGallery">
             {% for listing in recent_listings %}
             <a href="{% url 'show_listing' listing.pk %}">

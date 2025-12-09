@@ -1,0 +1,28 @@
+<!-- partout/templates/partout/create_offer_form.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/add_car_form.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+<div class="profilePage">
+    <section class="widget">
+        <h2>Make Offer</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">Send Offer!</button>
+            <a href="{% url 'show_listing' listing_pk %}">Cancel</a>
+            
+        </form>
+    </section>
+</div>
+
+
+{% endblock content %}

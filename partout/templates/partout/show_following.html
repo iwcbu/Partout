@@ -1,0 +1,33 @@
+<!-- partout/templates/partout/show_following.html -->
+
+{% extends 'partout/base.html' %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/followdetail.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+
+<a href="{% url 'show_profile' %}"><- Back</a>
+<h3>Following</h3>
+<main class="profile-grid">
+
+    {% for follow in following %}
+    <profile>
+        
+        <div class="name-info">
+            <h5>{{ follow.driver.first_name }} {{ follow.driver.last_name }}</h5>
+            <h6><i>{{ follow.driver.username }}</i></h6>
+        </div>
+        <a href="{% url 'show_profile' follow.driver.pk %}" class="profile-link">
+            <img src="{{ follow.driver.profile_image.url }}" alt="{{ follow.driver.first_name }}" class="profile-image">
+        </a>
+            
+        </profile>
+
+    
+    {% endfor %}
+</main>
+
+
+{% endblock %}

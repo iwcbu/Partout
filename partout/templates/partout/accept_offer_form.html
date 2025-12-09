@@ -1,0 +1,46 @@
+<!-- partout/templates/partout/delete_car_form.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+    <link rel="stylesheet" href="{% static 'partout/css/delete_car_form.css' %}">
+    <link rel="stylesheet" href="{% static 'partout/css/messages.css' %}">
+    <link rel="stylesheet" href="{% static 'partout/css/profile.css' %}">
+
+{% endblock sub_css %}
+
+{% block content %}
+
+<h1 id="titleCPF">Accept Offer?</h1>
+
+<div id="boxCPF">
+    <div id="optionFormH3Box" >
+
+        <h3 style="text-align: center; margin-bottom: 25px;">
+            Are you sure you want to accept this offer?
+        </h3>
+
+        <div class="messageCard">
+            <img src="{{ offer.listing.image.url }}" alt="profile picture">
+            
+            <div class="messageInfo">
+                <h4>{{ offer.buyer.first_name }} {{ offer.buyer.last_name }}</h4>
+                <h4 style="color: green;">${{ offer.amount }}</h4>
+                <p>
+                    On: {{ offer.listing.title }}
+                    ({{ offer.get_status_display }})
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="createPostSubCan">
+        <a href="{% url 'message_buyer_from_offer' offer.pk %}" id="update-button">Yes!</a>
+
+        <a href="{% url 'messages' %}" id="cancelButtonCPF">No, cancel</a>
+    </div>
+</div>
+
+{% endblock %}

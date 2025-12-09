@@ -128,29 +128,28 @@ class Listing(models.Model):
     '''contains listing model data'''
 
     condition_choices = [
-        ("new", "New"),
-        ("like_new", "Like New"),
-        ("used", "Used"),
-        ("abused", "Abused"),
+        ("New", "New"),
+        ("Like New", "Like New"),
+        ("Used", "Used"),
+        ("Abused", "Abused"),
     ]
 
     part_type = [
-        ("engne", "Engine"),
-        ("trans", "Transmission"),
-        ("exhst", "Exhaust"),
-        ("wheel", "Wheels"),
-        ("suspn", "Suspension"),
-        ("exter", "Exterior"),
-        ("inter", "Interior"),
+        ("Engine", "Engine"),
+        ("Transmission", "Transmission"),
+        ("Exhaust", "Exhaust"),
+        ("Wheels", "Wheels"),
+        ("Suspension", "Suspension"),
+        ("Exterior", "Exterior"),
+        ("Interior", "Interior"),
     ]
 
     status_choices = [
-        ("active", "Active"),
-        ("pending", "Pending"),
-        ("sold", "Sold"),
-        ("na", "Not Availavle")
+        ("Active", "Active"),
+        ("Pending", "Pending"),
+        ("Sold", "Sold"),
+        ("Not Available", "Not Available")
     ]
-
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
     
@@ -158,8 +157,8 @@ class Listing(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="listings")  # the car that this part came from or is intended for
     
     
-    part_type = models.CharField(max_length=15, choices=part_type)
-    condition = models.CharField(max_length=10, choices=condition_choices)
+    part_type = models.CharField(choices=part_type)
+    condition = models.CharField(choices=condition_choices)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     open_to_offers = models.BooleanField(default=True)
     city = models.CharField(max_length=100)
@@ -169,36 +168,23 @@ class Listing(models.Model):
     # )
     image = models.ImageField(upload_to="listings/images/", blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=status_choices, default="active")
+    status = models.CharField(choices=status_choices, default="Active")
 
     def __str__(self):
         '''string representation of model'''
         return f'{self.title} ~ {self.seller} (${self.price})'
-    
-    def get_all_comments(self):
-        '''returns all comment objects associated with listing'''
-
-        from .models import Comment
-        return Comment.objects.filter(listing=self).order_by('created')
     
     def get_likes(self):
         '''returns likes on a listing'''
 
         from .models import Like
         return Like.objects.filter(listing=self).order_by('created')
-
-
-
-class Comment(models.Model):
-    '''contains comment model data'''
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
-    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="comments")
     
-    text = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
+    def get_saves(self):
+        '''returns saves on a listing'''
 
-    def __str__(self):
-        return f"Comment by {self.author} on {self.listing}"
+        from .models import SavedListing
+        return SavedListing.objects.filter(listing=self).order_by('created')
 
 
 class Like(models.Model):
@@ -212,29 +198,29 @@ class Like(models.Model):
         unique_together = ("listing", "driver")
 
     def __str__(self):
-        return f"{self.user} likes {self.listing}"
+        return f"{self.driver} likes {self.listing}"
 
 
 class SavedListing(models.Model):
     '''contains saved listing model data'''
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="saved_by")
-    user = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="saved_listings")
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="saved_listings")
     
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("listing", "user")
+        unique_together = ("listing", "driver")
 
     def __str__(self):
-        return f"{self.user} saved {self.listing}"
+        return f"{self.driver} saved {self.listing}"
 
 
 class Offer(models.Model):
     '''contains offer model data'''
     status_choices = [
-        ("pending", "Pending"),
-        ("accepted", "Accepted"),
-        ("declined", "Declined"),
+        ("Pending", "Pending"),
+        ("Accepted", "Accepted"),
+        ("Declined", "Declined"),
     ]
 
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="offers")
@@ -243,7 +229,7 @@ class Offer(models.Model):
     
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=status_choices, default="pending")
+    status = models.CharField(max_length=10, choices=status_choices, default="Pending")
 
     def __str__(self):
         return f"Offer ${self.amount} by {self.buyer} on {self.listing}"

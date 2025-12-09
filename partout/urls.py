@@ -10,12 +10,16 @@ urlpatterns = [
     path("", MarketView.as_view(), name="market"),
     path("/market", MarketView.as_view(), name="market"),
     path("/market/listing/<int:pk>", ListingView.as_view(), name="show_listing"),
-    # path("/market/listing/<int:pk>/update", UpdateListingView.as_view(), name="update_listing"),
+    path("/market/listing/<int:pk>/update", UpdateListingView.as_view(), name="update_listing"),
     path("/market/listing/<int:pk>/delete", DeleteListingView.as_view(), name="delete_listing"),
     path("/market/seller/<int:seller_pk>/listing/new", CreateListingView.as_view(), name="create_listing"),
+    
     path("/market/seller/<int:seller_pk>/message/new", MessageSellerView.as_view(), name="message_seller"),
-    # path("/market/listing/<int:pk>/offer/new", OfferListingView.as_view(), name="offer_listing "),
-
+    path("/market/listing/<int:listing_pk>/offer/new", CreateOfferView.as_view(), name="create_offer"),
+    path("/market/listing/offer/<int:pk>/delete", DeleteOfferView.as_view(), name="delete_offer"),
+    path("/market/listing/offer/<int:pk>/accept", AcceptOfferView.as_view(), name="accept_offer"),
+    
+    path("offers/<int:pk>/message_buyer/", MessageOfferBuyerView.as_view(), name="message_buyer_from_offer"),
 
     # home
     path("/home", HomeView.as_view(), name="home"),
@@ -26,7 +30,9 @@ urlpatterns = [
     path("/profile/new", CreateProfileView.as_view(), name="create_profile"),
     path('/profile/update', UpdateProfileView.as_view(), name='update_profile'),
     path("/profile/add_car", AddCarView.as_view(), name="add_car"),
-    path("/profile/remove_car/<int:pk>", DeleteCarView.as_view(), name="delete_car"),
+    path("/profile/add_car", AddCarView.as_view(), name="add_car"),
+    path("/profile/car/<int:pk>/update", UpdateCarView.as_view(), name="update_car"),
+    path("/profile/car/<int:pk>/remove", DeleteCarView.as_view(), name="delete_car"),
 
 
 
@@ -42,8 +48,10 @@ urlpatterns = [
     # path('profile/<int:pk>/following', ShowFollowingView.as_view(), name='show_following'),
     path('profile/<int:pk>/follow', FollowView.as_view(), name='follow'),
     path('profile/<int:pk>/delete_follow', FollowView.as_view(), name='delete_follow'),
-    # path('post/<int:pk>/like', LikeView.as_view(), name='like'),
-    # path('post/<int:pk>/delete_like', LikeView.as_view(), name='delete_like'),
+    path('listing/<int:pk>/like', LikeView.as_view(), name='like'),
+    path('listing/<int:pk>/delete_like', LikeView.as_view(), name='delete_like'),
+    path('listing/<int:pk>/save', SaveView.as_view(), name='save'),
+    path('listing/<int:pk>/delete_save', SaveView.as_view(), name='delete_save'),
 
      # auth
     path('/login', auth_views.LoginView.as_view(template_name='partout/login.html'), name='login'),

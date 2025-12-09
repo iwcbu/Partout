@@ -1,0 +1,31 @@
+<!-- mini_insta/templates/mini_insta/update_profile_form.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/update_listing_form.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+
+<h1 class="title">Update Car</h1>
+<div class="container">
+    <form action="{% url 'update_car' car.pk %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <table class="form-box">
+            <tr>
+                {{form.as_table}}
+            </tr>
+        </table>
+        
+        <div class="button-box">
+            <input type="submit" name="submit" class="submit-button">
+            <a href="{% url 'show_profile' car.owner.pk %}" class="cancel-button">Cancel</a>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}
