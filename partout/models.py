@@ -39,31 +39,36 @@ class Follow(models.Model):
     def get_followers(driver):
         '''Returns list of profiles that follow a profile'''
 
-        followers = Follow.objects.filter(driver=driver) # returns query list of follow relationships following profile
-
-        # turns query list into list
+        followers = Follow.objects.filter(driver=driver).distinct() # returns query list of follow relationships following profile
         return list(followers)
     
+    def get_follower_profiles(driver):
+        '''Returns list of profiles that follow a profile'''
+
+        followers = Follow.objects.filter(driver=driver).distinct() 
+        return [f.driver_that_followed for f in followers] # turns query list of follow relationships into just the driver profiles
+    
+
     def get_followers_qs(driver):
         '''returns a queryset of profiles that follow a profile'''
 
-        return Driver.objects.filter(driver_that_follows__driver=driver)
-    
+        return Driver.objects.filter(driver_that_followed__driver=driver)
+        
 
     def get_num_followers(driver):
         '''Returns number of followers'''
 
         return Follow.objects.filter(driver=driver).count()
-    
-
+        
 
     def get_following(driver):
         '''Returns list of profiles that a profile follows'''
 
         follows = Follow.objects.filter(driver_that_followed=driver) # returns query list of follow relationships that a profile follows
-
-        # querylist to list
         return list(follows)
+
+
+    
     
     def get_num_following(driver):
         '''Returns number of profiles a profile follows'''

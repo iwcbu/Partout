@@ -23,7 +23,7 @@
                     {% if request.user.is_authenticated %}
                         {% if request.user.driver %}
                             <li><a href="{% url 'home' %}">Home</a></li>
-                            <li><a href="{% url 'profile' request.user.driver.pk %}">Profile</a></li>
+                            <li><a href="{% url 'show_profile' request.user.driver.pk %}">Profile</a></li>
                             <li><a href="{% url 'messages' %}">Messages</a></li>
                         {% endif%}
              

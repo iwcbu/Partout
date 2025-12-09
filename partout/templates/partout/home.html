@@ -22,11 +22,11 @@
                         {% if m.sender.profile_image %}
                         <img src="{{ m.sender.profile_image.url }}" alt="profile picture">
                         {% else %}
-                        <img src="https://thumbs.dreamstime.com/b/black-business-man-thumb-up-happy-giving-modern-office-67668710.jpg" alt="profile picture">
+                        <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture">
                         {% endif %}
                         <h4>{{ m.sender.first_name }}</h4>
                         {% if not m.is_read %} 
-                        <p style="font-weight: bolder;">{{ m.text|slice:30 }} {% if m.text.length > 30 %}...{% endif %}</p>
+                        <p style="font-weight: bolder;">{{ m.text|slice:30 }} {% if m.text|length > 30 %}...{% endif %}</p>
                         {% else %}
                         <p>{{ m.text|slice:30 }}{% if m.text.length > 30 %}...{% endif %}</p>
                         {% endif %}
@@ -36,11 +36,10 @@
         {% endif %}
 
         
-        <button>See all</button>
+        <a href="{% url 'messages' %}" class="home-link-button">See Conversations</a>
 
     </div>
    
-    <!-- saved listings or empty if nothing listed -->
     <div class="widget">
         <h3>Recent Activity</h3>
         {% if messages %}
@@ -52,7 +51,7 @@
                         {% if m.sender.profile_image %}
                         <img src="{{ m.sender.profile_image.url }}" alt="profile picture">
                         {% else %}
-                        <img src="https://thumbs.dreamstime.com/b/black-business-man-thumb-up-happy-giving-modern-office-67668710.jpg" alt="profile picture">
+                        <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture">
                         {% endif %}
                         <h4>{{ m.sender.first_name }}</h4>
                         {% if not m.is_read %} 
@@ -66,7 +65,7 @@
         {% endif %}
 
         
-        <button>See all</button>
+        <a href="{% url 'messages' %}" class="home-link-button">See Conversations</a>
 
     </div>
    
@@ -87,7 +86,7 @@
             {% endfor %}
         </div>
         
-        <button>See all</button>
+        <a href="{% url 'market' %}" class="home-link-button">Show all Listings</a>
         
     </div>
         

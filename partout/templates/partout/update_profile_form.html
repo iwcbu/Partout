@@ -1,0 +1,138 @@
+<!-- partout/templates/partout/update_profile_form.html -->
+
+{% extends 'partout/base.html' %}
+
+{% block content %}
+
+
+<h1 id="titleCPF">{{ driver.username }}: Update Profile</h1>
+<div id="boxCPF">
+    <form action="{% url 'update_profile' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <table id="tableCPF">
+            <tr>
+                {{form.as_table}}
+            </tr>
+        </table>
+        
+
+        <div style="display: flex; gap: 100px; justify-content: center;">
+            <input type="submit" name="submit" class="submit-button">
+            <a href="{% url 'show_profile' request.user.driver.pk %}" class="cancel-button">cancel</a>
+        </div>
+
+    </form>
+</div>
+
+<style>
+
+    #titleCPF {
+        width: 80%;
+        margin: 1.5rem auto 0.75rem;
+        font-size: 1.4rem;
+        font-weight: 650;
+        text-align: left;
+        color: #111827;
+    }
+
+    #boxCPF {
+        width: 80%;
+        margin: 0 auto 2rem;
+        background: #f9fafb;
+        border-radius: 18px;
+        padding: 1.5rem 1.75rem;
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+        border: 1px solid #e5e7eb;
+    }
+
+    #tableCPF {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.5rem;
+    }
+
+    #tableCPF th,
+    #tableCPF td {
+        padding: 0.4rem 0.6rem;
+        vertical-align: middle;
+        font-size: 0.9rem;
+    }
+
+    #tableCPF th {
+        text-align: right;
+        color: #4b5563;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    #tableCPF td {
+        text-align: left;
+    }
+
+    #boxCPF input[type="text"],
+    #boxCPF input[type="email"],
+    #boxCPF input[type="file"],
+    #boxCPF input[type="password"],
+    #boxCPF textarea,
+    #boxCPF select {
+        width: 100%;
+        padding: 0.45rem 0.55rem;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        font-size: 0.9rem;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    #boxCPF textarea {
+        min-height: 80px;
+        resize: vertical;
+    }
+
+    #boxCPF input:focus,
+    #boxCPF textarea:focus,
+    #boxCPF select:focus {
+        border-color: #0a5aaa;
+        box-shadow: 0 0 0 1px rgba(10, 90, 170, 0.15);
+    }
+
+    .submit-button,
+    .cancel-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 110px;
+        padding: 0.45rem 1.2rem;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: 1px solid transparent;
+    }
+
+    .submit-button {
+        background: #0a5aaa;
+        color: #ffffff;
+        border-color: #0a5aaa;
+    }
+
+    .submit-button:hover {
+        background: #08497f;
+        border-color: #08497f;
+    }
+
+    .cancel-button {
+        background: #ffffff;
+        color: #4b5563;
+        border-color: #d1d5db;
+    }
+
+    .cancel-button:hover {
+        background: #f3f4f6;
+    }
+
+    </style>
+
+    {% endblock %}

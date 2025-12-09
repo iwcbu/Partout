@@ -19,3 +19,20 @@ class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model = Driver
         fields = ['first_name', 'last_name', 'username', 'email', "city", "state", "zip_code", "profile_image", "bio"]
+
+class AddCarForm(forms.ModelForm):
+    '''form to add a new car to the db'''
+
+    class Meta:
+        model = Car
+        fields = [
+        "make",
+        "model",
+        "year",
+        "trim" ,
+        "style",
+        "engine_code",
+        "drivetrain",
+        "nickname",
+        "ownership_type"
+            ]

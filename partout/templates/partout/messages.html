@@ -35,7 +35,7 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <p>You don’t have any offers yet.</p>
+                <p>You don't have any offers yet.</p>
             {% endif %}
         </div>
     </section>
@@ -47,11 +47,12 @@
                 <form method="post" action="{% url 'start_convo' %}">
                 {% csrf_token %}
 
-                <select name="other_driver_id">
-                    {% for d in follower %}
-                        {% if d != driver %}
-                            <option value="{{ d.id }}">
-                                {{ d.first_name }} {{ d.last_name }}
+                <select name="other_driver_id" required>
+                    <option value="" selected disabled>Choose a person</option>
+                    {% for f in following %}
+                        {% if f.driver != current_driver %}
+                            <option value="{{ f.driver_that_followed.id }}">
+                                {{ f.driver.first_name }} {{ f.driver.last_name }}
                             </option>
                         {% endif %}
                     {% endfor %}
@@ -65,16 +66,17 @@
                     <a href="{% url 'conversation' convo.pk %}">
                         <div class="messageCard">
                             {% with p=convo.participants.first %}
-                                {% if p and p.profile_image %}
+                                {% if p %}
+                                    {% if p.profile_image %}
                                     <img src="{{ p.profile_image.url }}" alt="profile picture">
-                                {% else %}
+                                    {% else %}
                                     <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture">
+                                    {% endif %}
                                 {% endif %}
                             {% endwith %}
 
                             <div class="messageInfo">
                                 <h4>
-                                    {# list all participants #}
                                     {% for p in convo.participants.all %}
                                         {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %}, {% endif %}
                                     {% endfor %}
@@ -89,7 +91,7 @@
                     </a>    
                 {% endfor %}
             {% else %}
-                <p>You don’t have any messages yet.</p>
+                <p>You don't have any messages yet.</p>
             {% endif %}
         </div>
     </section>

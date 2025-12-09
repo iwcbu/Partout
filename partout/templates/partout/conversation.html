@@ -17,7 +17,9 @@
         {% for p in participants %}
             {% if p == driver %}
             {% else %}
-                {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %} {% endif %}
+                <a href="{% url 'show_profile' p.pk %}">
+                    {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %} {% endif %}
+                </a>
             {% endif %}
         {% endfor %}
     </h1>
@@ -35,13 +37,15 @@
                 <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="bubble-avatar">
                 {% endif %}
             </div>
-        {% else %}
+            {% else %}
             <div class="bubble-box-other">
-                {% if m.sender.profile_image %}
-                <img src="{{ m.sender.profile_image.url }}" alt="Profile picture" class="bubble-avatar-other">
-                {% else %}
-                <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="bubble-avatar-other">
-                {% endif %}
+                <a href="{% url 'show_profile' m.sender.pk %}">
+                    {% if m.sender.profile_image %}
+                    <img src="{{ m.sender.profile_image.url }}" alt="Profile picture" class="bubble-avatar-other">
+                    {% else %}
+                    <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="bubble-avatar-other">
+                    {% endif %}
+                </a> 
                 <div class="other-account-bubble">
                     <p class="bubble-text">{{ m.text }}</p>
                 </div>

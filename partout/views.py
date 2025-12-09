@@ -24,7 +24,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
             return None
 
         try:
-            return Driver.objects.get(email=user.email)
+            return Driver.objects.get(user=user)
         except Driver.DoesNotExist:
             return None
 
@@ -154,7 +154,7 @@ class MessagesView(LoginRequiredMixin, ListView):
 
         if driver:
             context["offers"] = Offer.objects.filter(listing__seller=driver)
-            context["followers"] = Follow.get_followers(driver)
+            context["following"] = Follow.get_following(driver)
 
 
         return context
@@ -228,7 +228,7 @@ class StartConvoView(LoginRequiredMixin, View):
             return None
 
         try:
-            return Driver.objects.get(email=user.email)
+            return Driver.objects.get(user=user)
         except Driver.DoesNotExist:
             return None
     
@@ -251,14 +251,14 @@ class StartConvoView(LoginRequiredMixin, View):
         dm = DirectMessage.objects.create()
         dm.participants.add(current_driver, other_driver)
 
-        return redirect("conversation_detail", pk=dm.pk)
+        return redirect("conversation", pk=dm.pk)
     
     def get(self, request, *args, **kwargs):
         return redirect("messages")
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
-    template_name = "partout/profile.html"
+    template_name = "partout/show_profile.html"
     model = Driver
     context_object_name = "driver"
 
@@ -308,6 +308,8 @@ class ProfileView(LoginRequiredMixin, DetailView):
         followers = Follow.get_num_followers(driver)
         following = Follow.get_num_following(driver)
 
+
+
         context["stats"] = {
             "total_listings": driver.listings.count(),
             "active_listings": driver.listings.filter(status="active").count(),
@@ -317,6 +319,11 @@ class ProfileView(LoginRequiredMixin, DetailView):
             "followers": followers,
             "following": following,
         }
+
+        userProfile = self.request.user.driver
+        followers_qs = Follow.get_follower_profiles(driver)
+        context["followed_by_user"] = userProfile in followers_qs
+
 
         return context
     
@@ -362,4 +369,132 @@ class CreateProfileView(CreateView):
 
         return reverse('profile', kwargs={'pk': driver.pk})
  
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
+    """defines a view class to update a given profile"""
+
+    model = Driver
+    form_class = UpdateProfileForm
+    template_name = 'partout/update_profile_form.html'
+
+    def get_object(self, queryset = None):
+        '''returns driver profile'''
+        user = self.request.user
+        profile = Driver.objects.get(user=user)
+        return profile
+    
+    def get_success_url(self):
+        '''on successful submission, show user their updated driver profile'''
+
+        profile = self.get_object()
+
+        return reverse('show_profile', kwargs={'pk': profile.pk})
+    
+
+    def get_login_url(self):
+        '''return the url for the apps login'''
+        return reverse('login')
+
+
+class FollowView(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+
+        if not user.is_authenticated:
+            return redirect('login')
         
+
+        try:
+            pk = kwargs['pk']
+            driver = Driver.objects.get(pk=pk)
+        except Driver.DoesNotExist: # missing posts or network error
+            from django.http import Http404
+            raise Http404("Profile not found")
+        
+        userProfile = user.driver
+        action = request.GET.get("action", "follow")
+        if action == "follow":
+            Follow.objects.create(driver=driver, driver_that_followed=userProfile)
+        else:
+            Follow.objects.filter(driver=driver, driver_that_followed=userProfile).delete()
+        
+        return redirect('show_profile', pk=driver.pk)
+        
+
+
+
+class AddCarView(CreateView):
+    model = Car
+
+    fields = [
+        "make",
+        "model",
+        "year",
+        "trim" ,
+        "style",
+        "engine_code",
+        "drivetrain",
+        "nickname",
+        "ownership_type"
+            ]
+
+    template_name = 'partout/add_car_form.html'
+
+
+    def form_valid(self, form):
+            '''link the owner to the current user'''
+
+            driver = self.request.user.driver
+            form.instance.owner = driver
+
+            return super().form_valid(form)
+    
+
+    def get_success_url(self):
+        '''redirects user to their profile after creating a new car'''
+
+        driver = self.request.user.driver
+
+        return reverse("show_profile", kwargs={ "pk": driver.pk } )
+    
+
+
+
+class DeleteCarView(DeleteView):
+    '''deletes car object from django db'''
+
+    model = Car
+    template_name = "partout/delete_car_form.html"
+
+    def get_context_data(self, **kwargs):
+        '''returns context data required for deleting post'''
+
+        context = super().get_context_data()
+        pk = self.kwargs['pk']
+        car = Car.objects.get(pk=pk)
+        context['car'] = car
+        context['driver'] = car.owner
+
+        return context 
+    
+    def get_login_url(self):
+        '''return the url for the apps login'''
+        return reverse('login')
+
+    
+
+    def get_success_url(self):
+        '''return the url to redirect to after a successful delete'''
+
+        # find pk of comment
+        pk = self.kwargs['pk']
+
+        #find comment
+        car = Car.objects.get(pk=pk)
+
+        # find pk of article where the comment was associated with
+        driver = car.owner
+
+        #return url to redirect to
+        return reverse('show_profile', kwargs={'pk': driver.pk})
+    

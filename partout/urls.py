@@ -16,8 +16,13 @@ urlpatterns = [
 
 
     # profile
-    path("/profile/<int:pk>", ProfileView.as_view(), name="profile"),
+    path("/profile/<int:pk>", ProfileView.as_view(), name="show_profile"),
     path("/profile/new", CreateProfileView.as_view(), name="create_profile"),
+    path('/profile/update', UpdateProfileView.as_view(), name='update_profile'),
+    path("/profile/add_car", AddCarView.as_view(), name="add_car"),
+    path("/profile/remove_car/<int:pk>", DeleteCarView.as_view(), name="delete_car"),
+
+
 
 
     # private interactions
@@ -28,8 +33,8 @@ urlpatterns = [
     # # social interactions
     # path('profile/<int:pk>/followers', ShowFollowersView.as_view(), name='show_followers'),
     # path('profile/<int:pk>/following', ShowFollowingView.as_view(), name='show_following'),
-    # path('profile/<int:pk>/follow', FollowView.as_view(), name='follow'),
-    # path('profile/<int:pk>/delete_follow', FollowView.as_view(), name='delete_follow'),
+    path('profile/<int:pk>/follow', FollowView.as_view(), name='follow'),
+    path('profile/<int:pk>/delete_follow', FollowView.as_view(), name='delete_follow'),
     # path('post/<int:pk>/like', LikeView.as_view(), name='like'),
     # path('post/<int:pk>/delete_like', LikeView.as_view(), name='delete_like'),
 
