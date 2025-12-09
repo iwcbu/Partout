@@ -70,20 +70,22 @@
 
     </div>
    
-    <!-- recomended listings based on garage -->
+    <!-- recent listings based on garage -->
     <div class="widgetLong">
         <h3>Recent Listings</h3>
         <div class="listingGallery">
             {% for listing in recent_listings %}
-            <div class="listingGalleryCard">
-                {% if listing.image %}
-                <img src="{{listing.image.url}}" alt="car part">
-                {% else %}
-                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-                {% endif %}
-                <h4>{{listing.title|slice:15}}</h4>
-                <p>{{ listing.description|slice:30 }}</p>
-            </div>
+            <a href="{% url 'show_listing' listing.pk %}">
+                <div class="listingGalleryCard">
+                    {% if listing.image %}
+                    <img src="{{listing.image.url}}" alt="car part">
+                    {% else %}
+                    <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+                    {% endif %}
+                    <h4>{{listing.title|slice:15}}</h4>
+                    <p>{{ listing.description|slice:30 }}</p>
+                </div>
+            </a>
             {% endfor %}
         </div>
         

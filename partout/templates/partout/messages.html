@@ -17,22 +17,18 @@
 
             {% if offers %}
                 {% for offer in offers %}
-                    <div class="messageCard">
-                        {% if offer.buyer.profile_image %}
-                            <img src="{{ offer.buyer.profile_image.url }}" alt="profile picture">
-                        {% else %}
-                            <img src="{% static 'partout/img/default-avatar.png' %}" alt="profile picture">
-                        {% endif %}
-
-                        <div class="messageInfo">
-                            <h4>{{ offer.buyer.first_name }} {{ offer.buyer.last_name }}</h4>
-                            <h4 style="color: green;">${{ offer.amount }}</h4>
-                            <p>
-                                On: {{ offer.listing.title }}
-                                ({{ offer.get_status_display }})
-                            </p>
+                        <div class="messageCard">
+                            <img src="{{ offer.listing.image.url }}" alt="profile picture">
+                            
+                            <div class="messageInfo">
+                                <h4>{{ offer.buyer.first_name }} {{ offer.buyer.last_name }}</h4>
+                                <h4 style="color: green;">${{ offer.amount }}</h4>
+                                <p>
+                                    On: {{ offer.listing.title }}
+                                    ({{ offer.get_status_display }})
+                                </p>
+                            </div>
                         </div>
-                    </div>
                 {% endfor %}
             {% else %}
                 <p>You don't have any offers yet.</p>
@@ -43,52 +39,48 @@
     <section class="directMessages">
         <div class="widget">
             <div class="heading-container">
-                <h3>Messages</h3>
-                <form method="post" action="{% url 'start_convo' %}">
-                {% csrf_token %}
-
-                <select name="other_driver_id" required>
-                    <option value="" selected disabled>Choose a person</option>
-                    {% for f in following %}
-                        {% if f.driver != current_driver %}
-                            <option value="{{ f.driver_that_followed.id }}">
-                                {{ f.driver.first_name }} {{ f.driver.last_name }}
-                            </option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-
-                <button type="submit">New Convo</button>
+                <h3>Messages
+                </h3>
+                
             </div>
-
+            <div>
+                <a href="{% url 'start_convo' %}" class="new-convo-button">New Convo</a>
+            </div>
+            
             {% if conversations %}
                 {% for convo in conversations %}
-                    <a href="{% url 'conversation' convo.pk %}">
-                        <div class="messageCard">
-                            {% with p=convo.participants.first %}
-                                {% if p %}
-                                    {% if p.profile_image %}
-                                    <img src="{{ p.profile_image.url }}" alt="profile picture">
-                                    {% else %}
-                                    <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture">
+                <div class="messageCard">
+                        <a href="{% url 'conversation' convo.pk %}">
+                                <div>
+                                    
+                                {% with p=convo.participants.first %}
+                                    {% if p %}
+                                        {% if p.profile_image %}
+                                        <img src="{{ p.profile_image.url }}" alt="profile picture">
+                                        {% else %}
+                                        <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture">
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
-                            {% endwith %}
+                                {% endwith %}
 
-                            <div class="messageInfo">
-                                <h4>
-                                    {% for p in convo.participants.all %}
-                                        {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
-                                </h4>
+                                <div class="messageInfo">
+                                    <h4>
+                                        {% for p in convo.participants.all %}
+                                            {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </h4>
 
-                                <p>
-                                    Last updated:
-                                    {{ convo.updated|date:"M j, g:i a" }}
-                                </p>
-                            </div>
-                        </div>
-                    </a>    
+                                    <p>
+                                        Last updated:
+                                        {{ convo.updated|date:"M j, g:i a" }}
+                                    </p>
+                                </div>
+                            </a>   
+                        </div> 
+                        <a href="{% url 'delete_convo' convo.pk %}" style="margin-left: auto;">
+                            <p style="color: darkred;">Remove</p>
+                        </a>   
+                    </div>
                 {% endfor %}
             {% else %}
                 <p>You don't have any messages yet.</p>
@@ -97,5 +89,6 @@
     </section>
 
 </div>
+
 
 {% endblock %}

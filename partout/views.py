@@ -7,8 +7,8 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
-from django.shortcuts import redirect
 from django.urls import reverse
+from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, DetailView, View, CreateView, UpdateView, DeleteView
 
 
@@ -113,9 +113,118 @@ class MarketView(ListView):
     
 
 class ListingView(DetailView):
+    '''Displays selected Listing'''
+
     model = Listing
-    template_name = "partout/listing.html"
-    context_object_name = ""
+    template_name = 'partout/show_listing.html'
+    context_object_name = 'listing'
+
+
+    def get_context_data(self, **kwargs):
+        '''gets context data related to listings'''
+        context = super().get_context_data(**kwargs)
+        likes = self.object.get_likes()
+        comments = self.object.get_all_comments()
+
+        context['photo'] = self.object.image
+        context['comments'] = comments
+        context['likes'] = likes
+
+        if self.request.user.is_authenticated:
+            driver = self.request.user.driver
+            context['liked_by_user'] = likes.filter(driver=driver).exists
+
+        
+        return context
+    
+
+class CreateListingView(LoginRequiredMixin, CreateView):
+    '''View to create listing for a given driver'''
+
+    model = Listing
+    form_class = CreateListingForm
+    template_name = 'partout/create_listing_form.html'
+
+
+    def form_valid(self, form):
+        '''link the seller to the current user'''
+        driver = self.request.user.driver
+        form.instance.seller = driver
+
+        return super().form_valid(form)
+    
+    def get_form_kwargs(self):
+        """pass the current driver into the form for filtering car objects"""
+        kwargs = super().get_form_kwargs()
+        kwargs["driver"] = self.request.user.driver
+        
+        return kwargs
+
+    def get_success_url(self):
+        '''redirects user to their profile after creating a new car'''
+
+
+        return reverse("show_listing", kwargs={ "pk": self.object.pk } )
+    
+
+
+class DeleteListingView(LoginRequiredMixin, DeleteView):
+    '''deletes car object from django db'''
+
+    model = Listing
+    template_name = "partout/delete_listing_form.html"
+
+    def get_context_data(self, **kwargs):
+            '''returns context data required for deleting listing'''
+
+            context = super().get_context_data()
+            pk = self.kwargs['pk']
+            listing = Listing.objects.get(pk=pk)
+            context['listing'] = listing
+
+            return context 
+    
+    def get_login_url(self):
+        '''return the url for the apps login'''
+        return reverse('login')
+
+    def get_success_url(self):
+        '''return the url to redirect to after a successful delete'''
+
+        return reverse('market')
+    
+
+class MessageSellerView(LoginRequiredMixin, View):
+    '''creates a DirectMessage conversation between seller and current driver
+    then redirects to the conversation view'''
+
+    def get_current_driver(self):
+        '''gets the current user's driver profile'''
+
+        user = self.request.user
+        if not user.is_authenticated:
+            return None
+        
+        try:
+            return Driver.objects.get(user=user)
+        except Driver.DoesNotExist:
+            return None
+        
+    def get(self, request, seller_pk, *args, **kwargs):
+        '''creates a a convo between seller and driver'''
+
+        driver = self.get_current_driver()
+        if driver is None:
+            return redirect("create_profile")
+
+        seller = Driver.objects.get(pk=seller_pk)
+        
+        convo = DirectMessage.objects.create()
+        convo.participants.set([driver, seller])
+
+        return redirect("conversation", pk=convo.pk)
+        
+    
 
 
 class MessagesView(LoginRequiredMixin, ListView):
@@ -190,6 +299,11 @@ class ConversationView(LoginRequiredMixin, DetailView):
             peeps = c.participants.all()
             context["participants"] = peeps
 
+            if driver in peeps:
+                context["is_allowed"] = True
+            else:
+                context["is_allowed"] = False
+
             convo = Message.objects.filter(conversation=c).order_by("created")
 
             context["conversation"] = convo
@@ -217,8 +331,10 @@ class ConversationView(LoginRequiredMixin, DetailView):
         return redirect("conversation", pk=convo.pk)
 
 
-
 class StartConvoView(LoginRequiredMixin, View):
+    
+    template_name = 'partout/start_convo_form.html'
+
     def get_current_driver(self):
         """
         maps the logged in user to the Driver.
@@ -231,30 +347,52 @@ class StartConvoView(LoginRequiredMixin, View):
             return Driver.objects.get(user=user)
         except Driver.DoesNotExist:
             return None
+
+    def form_valid(self, form):
+            '''link the owner to the current user'''
+
+            driver = self.request.user.driver
+            form.instance.owner = driver
+
+            return super().form_valid(form)
     
-    def post(self, request, *args, **kwargs):
-        current_driver = self.get_current_driver()
-        if current_driver is None:
-            return redirect("home")
 
+    def get_success_url(self):
+        '''redirects user to their profile after creating a new car'''
 
-        other_id = request.POST.get("other_driver_id")
-        if not other_id:
-            return redirect("messages")
-        other_driver = Driver.objects.get(pk=other_id)
-        
-        existing_dm = DirectMessage.objects.filter(participants=current_driver).filter(participants=other_driver).first()
+        driver = self.request.user.driver
 
-        if existing_dm is not None:
-            dm = existing_dm
-
-        dm = DirectMessage.objects.create()
-        dm.participants.add(current_driver, other_driver)
-
-        return redirect("conversation", pk=dm.pk)
+        return reverse("show_profile", kwargs={ "pk": driver.pk } )
     
-    def get(self, request, *args, **kwargs):
-        return redirect("messages")
+
+
+class DeleteConvoView(DeleteView):
+    '''deletes car object from django db'''
+
+    model = DirectMessage
+    template_name = "partout/delete_convo_form.html"
+
+    def get_context_data(self, **kwargs):
+        '''returns context data required for deleting post'''
+
+        context = super().get_context_data()
+        pk = self.kwargs['pk']
+        convo = DirectMessage.objects.get(pk=pk)
+        context['convo'] = convo
+
+        return context 
+    
+    def get_login_url(self):
+        '''return the url for the apps login'''
+
+        return reverse('login')
+
+    def get_success_url(self):
+        '''return the url to redirect to after a successful delete'''
+
+        return reverse('messages')
+    
+
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
@@ -418,7 +556,7 @@ class FollowView(TemplateView):
         else:
             Follow.objects.filter(driver=driver, driver_that_followed=userProfile).delete()
         
-        return redirect('show_profile', pk=driver.pk)
+        return redirect( 'show_profile', pk=driver.pk )
         
 
 

@@ -1,0 +1,27 @@
+<!-- partout/templates/partout/add_car_form.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/add_car_form.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+<div class="profilePage">
+    <section class="widget">
+        <h2>Start a new conversation</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">Start Conversation</button>
+            <a href="{% url 'messages' %}">Cancel</a>
+        </form>
+    </section>
+</div>
+
+
+{% endblock content %}

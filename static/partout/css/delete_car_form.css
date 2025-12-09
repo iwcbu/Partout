@@ -1,0 +1,98 @@
+/* django/static/partout/css/deleted_car_form.css */
+
+
+/* =========================
+    Remove Car Page Styling
+========================= */
+
+#titleCPF {
+    width: 80%;
+    margin: 1.5rem auto 0.75rem;
+    font-size: 1.4rem;
+    font-weight: 650;
+    text-align: left;
+    color: #111827;
+}
+
+#boxCPF {
+    width: 80%;
+    margin: 0 auto 2rem;
+    background: #f9fafb;
+    border-radius: 18px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e5e7eb;
+}
+
+/* header text container inside the box */
+#optionFormH3Box {
+    margin-bottom: 1.25rem;
+}
+
+#optionFormH3Box h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 550;
+    color: #111827;
+}
+
+/* button row (Delete / Cancel) */
+#createPostSubCan {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* primary delete button */
+
+#submitButtonCPF {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+    padding: 0.45rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid #b91c1c;
+    background: #b91c1c;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+#submitButtonCPF:hover {
+    background: #991b1b;
+    border-color: #991b1b;
+}
+
+/* cancel link */
+
+#cancelButtonCPF {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+    padding: 0.4rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #4b5563;
+    text-decoration: none;
+}
+
+#cancelButtonCPF:hover {
+    background: #f3f4f6;
+}
+
+/* mobile tweak */
+
+@media (max-width: 640px) {
+    #titleCPF,
+    #boxCPF {
+        width: 95%;
+    }
+}

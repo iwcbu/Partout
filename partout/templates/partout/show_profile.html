@@ -114,15 +114,17 @@
         <div class="listingGallery">
             {% if stats.total_listings > 0 %}
                 {% for listing in listings %}
-                <div class="listingGalleryCard">
-                    {% if listing.image %}
-                    <img src="{{ listing.image.url }}" alt="car part">
-                    {% else %}
-                    <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-                    {% endif %}
-                    <h3>{{ listing.title }}</h3>
-                    <p>{% if listing.car %} Fits {{ listing.car }} {% endif %} {% if listing.condition %} • {{ listing.condition }} {% endif %} {% if listing.open_to_offers %} • Open to Offers {% else %} • Firm on Price {% endif %} </p>
-                </div>
+                <a href="{% url 'show_listing' listing.pk %}">
+                    <div class="listingGalleryCard">
+                        {% if listing.image %}
+                        <img src="{{ listing.image.url }}" alt="car part">
+                        {% else %}
+                        <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+                        {% endif %}
+                        <h3>{{ listing.title }}</h3>
+                        <p>{% if listing.car %} Fits {{ listing.car }} {% endif %} {% if listing.condition %} • {{ listing.condition }} {% endif %} {% if listing.open_to_offers %} • Open to Offers {% else %} • Firm on Price {% endif %} </p>
+                    </div>
+                </a>
                 {% endfor %}
 
             {% else %}

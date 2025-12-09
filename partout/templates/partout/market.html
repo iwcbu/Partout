@@ -11,7 +11,10 @@
 
 <div class="container">
     <h3>Active Listings</h3>
-    <form class="widgetSearch">
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'create_listing' request.user.driver.pk  %}" class="create-button">Create Listing</a>
+    {% endif %}
+        <form class="widgetSearch">
         <!-- <div name="part_type" class="searchBox">
             <div class="searchInput">
                 <label for="carSearch">Car</label>
@@ -36,15 +39,20 @@
     <div class="widgetLong">
         <div class="listingGallery">
             {% for listing in listings %}
-            <div class="listingGalleryCard">
-                {% if listing.image%}
-                <img src="{{ listing.image.url }}" alt="car part">
-                {% else %}
-                <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
-                {% endif %}
-                <h4>{{ listing.title }}</h4>
-                <p>{{ listing.description }}</p>
-            </div>
+            <a href="{% url 'show_listing' listing.pk %}">
+
+                <div class="listingGalleryCard">
+                    {% if listing.image%}
+                    <img src="{{ listing.image.url }}" alt="car part">
+                    {% else %}
+                    <img src="{% static 'partout/img/default_car.jpg' %}" alt="car part">
+                    {% endif %}
+                    <h4>{{ listing.title }}</h4>
+                    <p>{{ listing.description|slice:45 }}{% if listing.description|length > 30 %}...{% endif %}
+                    </p>
+                </div>
+                
+            </a>
             {% endfor %}
         </div> 
     </div>

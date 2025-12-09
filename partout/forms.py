@@ -26,13 +26,42 @@ class AddCarForm(forms.ModelForm):
     class Meta:
         model = Car
         fields = [
-        "make",
-        "model",
-        "year",
-        "trim" ,
-        "style",
-        "engine_code",
-        "drivetrain",
-        "nickname",
-        "ownership_type"
-            ]
+            "make",
+            "model",
+            "year",
+            "trim" ,
+            "style",
+            "engine_code",
+            "drivetrain",
+            "nickname",
+            "ownership_type"
+        ]
+        
+class CreateListingForm(forms.ModelForm):
+    '''for to create a new listing for the market'''
+
+    class Meta:
+        model = Listing
+        fields = [
+            "title",
+            "description",
+            "car",
+            "part_type",
+            "condition",
+            "price",
+            "open_to_offers",
+            "city",
+            "state",
+            "image",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        ''' prevents car selection from being all cars, and only allows
+            cars from driver's garage'''
+
+        driver = kwargs.pop("driver", None) # pull out driver from kwargs for filtering
+        super().__init__(*args, **kwargs)
+
+        if driver is not None:
+            # only show this driver's cars
+            self.fields["car"].queryset = Car.objects.filter(owner=driver)

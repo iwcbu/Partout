@@ -9,7 +9,13 @@ urlpatterns = [
     # market
     path("", MarketView.as_view(), name="market"),
     path("/market", MarketView.as_view(), name="market"),
-    path("/market/listing/<int:pk>", ListingView.as_view(), name="listing"),
+    path("/market/listing/<int:pk>", ListingView.as_view(), name="show_listing"),
+    # path("/market/listing/<int:pk>/update", UpdateListingView.as_view(), name="update_listing"),
+    path("/market/listing/<int:pk>/delete", DeleteListingView.as_view(), name="delete_listing"),
+    path("/market/seller/<int:seller_pk>/listing/new", CreateListingView.as_view(), name="create_listing"),
+    path("/market/seller/<int:seller_pk>/message/new", MessageSellerView.as_view(), name="message_seller"),
+    # path("/market/listing/<int:pk>/offer/new", OfferListingView.as_view(), name="offer_listing "),
+
 
     # home
     path("/home", HomeView.as_view(), name="home"),
@@ -28,6 +34,7 @@ urlpatterns = [
     # private interactions
     path("/messages", MessagesView.as_view(), name="messages"),
     path("/messages/new", StartConvoView.as_view(), name="start_convo"),
+    path("/profile/remove_convo/<int:pk>", DeleteConvoView.as_view(), name="delete_convo"),
     path("/messages/conversation/<int:pk>", ConversationView.as_view(), name="conversation"),
 
     # # social interactions

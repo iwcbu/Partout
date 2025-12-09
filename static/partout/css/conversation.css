@@ -24,6 +24,7 @@ Conversation View Styling
 
 .conversation-board {
     background-color: #1c1c1c;
+    border: #8b8b8b solid 2px;
     border-radius: 10px;
     padding: 16px;
     height: 50vh;

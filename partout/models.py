@@ -169,17 +169,30 @@ class Listing(models.Model):
     # )
     image = models.ImageField(upload_to="listings/images/", blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=status_choices, default="na")
+    status = models.CharField(max_length=10, choices=status_choices, default="active")
 
     def __str__(self):
         '''string representation of model'''
         return f'{self.title} ~ {self.seller} (${self.price})'
+    
+    def get_all_comments(self):
+        '''returns all comment objects associated with listing'''
+
+        from .models import Comment
+        return Comment.objects.filter(listing=self).order_by('created')
+    
+    def get_likes(self):
+        '''returns likes on a listing'''
+
+        from .models import Like
+        return Like.objects.filter(listing=self).order_by('created')
+
 
 
 class Comment(models.Model):
     '''contains comment model data'''
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="comments")
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="comments")
     
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
@@ -191,12 +204,12 @@ class Comment(models.Model):
 class Like(models.Model):
     '''contains like model data'''
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="likes")
-    user = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="likes" )
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="likes" )
     
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("listing", "user")
+        unique_together = ("listing", "driver")
 
     def __str__(self):
         return f"{self.user} likes {self.listing}"

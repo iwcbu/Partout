@@ -1,0 +1,28 @@
+<!-- partout/templates/partout/create_listing_form.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/add_car_form.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+<div class="profilePage">
+    <section class="widget">
+        <h2>Create Listing</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">List to Market</button>
+            <a href="{% url 'market' %}">Cancel</a>
+            
+        </form>
+    </section>
+</div>
+
+
+{% endblock content %}

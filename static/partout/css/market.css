@@ -40,6 +40,7 @@
   margin-bottom: 1rem;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
   transition: transform 0.2s ease;
+  height: 275px;
 }
 
 .listingGalleryCard:hover {
@@ -149,4 +150,31 @@
   border-color: #2563eb;
   box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.3);
   background-color: #ffffff;
+}
+
+
+.create-button { 
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+
+.create-button {
+  background: #0a5aaa;
+  color: white;
+  border-color: #0a5aaa;
+}
+
+.create-button {
+  background: #08497f;
+  border-color: #08497f;
 }

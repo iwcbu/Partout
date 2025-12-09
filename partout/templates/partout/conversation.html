@@ -9,58 +9,63 @@
 
 {% block content %}
 
-<a href="{% url 'messages' %}">
-    <h3><- Back to messages </h3>
-</a>
-<div class="container">
-    <h1> 
-        {% for p in participants %}
-            {% if p == driver %}
-            {% else %}
-                <a href="{% url 'show_profile' p.pk %}">
-                    {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %} {% endif %}
-                </a>
-            {% endif %}
-        {% endfor %}
-    </h1>
-
-    <div class="conversation-board">
-        {% for m in conversation %} 
-        {% if m.sender == driver %}
-            <div class="bubble-box">
-                <div class="driver-bubble">
-                    <p class="bubble-text">{{ m.text }}</p>
-                </div>
-                {% if driver.profile_image %}
-                <img src="{{ m.sender.profile_image.url }}" alt="pfp" class="bubble-avatar">
+{% if is_allowed %}
+    <a href="{% url 'messages' %}">
+        <h3>← Back to messages </h3>
+    </a>
+    <div class="container">
+        <h1> 
+            {% for p in participants %}
+                {% if p == driver %}
                 {% else %}
-                <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="bubble-avatar">
+                    <a href="{% url 'show_profile' p.pk %}">
+                        {{ p.first_name }} {{ p.last_name }}{% if not forloop.last %} {% endif %}
+                    </a>
                 {% endif %}
-            </div>
-            {% else %}
-            <div class="bubble-box-other">
-                <a href="{% url 'show_profile' m.sender.pk %}">
-                    {% if m.sender.profile_image %}
-                    <img src="{{ m.sender.profile_image.url }}" alt="Profile picture" class="bubble-avatar-other">
-                    {% else %}
-                    <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="bubble-avatar-other">
-                    {% endif %}
-                </a> 
-                <div class="other-account-bubble">
-                    <p class="bubble-text">{{ m.text }}</p>
-                </div>
-            </div>
-        {% endif %}
-        {% endfor %}
-        
-    </div>
+            {% endfor %}
+        </h1>
 
-    <form method="post" class="message-input-bar">
-        {% csrf_token %}
-        <input type="text" name="text" placeholder="Type a message..." class="message-input">
-        <button type="submit" class="message-send-btn">Send</button>
-    </form>
-</div>
+        <div class="conversation-board">
+            {% for m in conversation %} 
+            {% if m.sender == driver %}
+                <div class="bubble-box">
+                    <div class="driver-bubble">
+                        <p class="bubble-text">{{ m.text }}</p>
+                    </div>
+                    {% if driver.profile_image %}
+                    <img src="{{ m.sender.profile_image.url }}" alt="pfp" class="bubble-avatar">
+                    {% else %}
+                    <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="bubble-avatar">
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="bubble-box-other">
+                    <a href="{% url 'show_profile' m.sender.pk %}">
+                        {% if m.sender.profile_image %}
+                        <img src="{{ m.sender.profile_image.url }}" alt="Profile picture" class="bubble-avatar-other">
+                        {% else %}
+                        <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="bubble-avatar-other">
+                        {% endif %}
+                    </a> 
+                    <div class="other-account-bubble">
+                        <p class="bubble-text">{{ m.text }}</p>
+                    </div>
+                </div>
+            {% endif %}
+            {% endfor %}
+            
+        </div>
+
+        <form method="post" class="message-input-bar">
+            {% csrf_token %}
+            <input type="text" name="text" placeholder="Type a message..." class="message-input">
+            <button type="submit" class="message-send-btn">Send</button>
+        </form>
+    </div>
+{% else %}
+<h1>Reported for hacking</h1>
+<p>(jk)</p>
+{% endif %}
 
 
 {% endblock %}
