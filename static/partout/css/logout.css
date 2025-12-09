@@ -1,0 +1,156 @@
+/* django/static/partout/css/logout.css */
+
+
+/* =========================
+Auth layout: Logout styling
+========================= */
+
+
+.auth-box {
+    width: 100%;
+    min-height: calc(100vh - 120px); /* leaves room for nav/footer */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background: radial-gradient(#e8e8e8, #ffffff);
+    border-radius: 999px;
+}
+
+.auth-card {
+    background: #f9fafb;
+    border-radius: 18px;
+    padding: 1.75rem 2rem;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+    border: 1px solid #e5e7eb;
+    max-width: 420px;
+    width: 100%;
+}
+
+/* headings */
+
+.auth-message,
+.logout-message {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+    font-weight: 650;
+    text-align: center;
+    color: #111827;
+}
+
+/* table-form layout */
+
+.auth-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.2rem;
+}
+
+.auth-table th,
+.auth-table td {
+    padding: 0.35rem 0.25rem;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.auth-table th {
+    text-align: right;
+    color: #4b5563;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.auth-table td {
+    text-align: left;
+}
+
+/* inputs */
+
+.auth-card input[type="text"],
+.auth-card input[type="password"],
+.auth-card input[type="email"] {
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.auth-card input[type="text"]:focus,
+.auth-card input[type="password"]:focus,
+.auth-card input[type="email"]:focus {
+    outline: none;
+    border-color: #0a5aaa;
+    box-shadow: 0 0 0 1px rgba(10, 90, 170, 0.15);
+}
+
+/* primary auth button (Login / Back to Market) */
+
+.auth-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+    padding: 0.45rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid #0a5aaa;
+    background: #0a5aaa;
+    color: #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.auth-button:hover {
+    background: #08497f;
+    border-color: #08497f;
+}
+
+/* cancel link */
+
+.cancel-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 2px solid #d1d5db;
+    background: #ffffff;
+    color: #4b5563;
+    text-decoration: none;
+}
+
+.cancel-button:hover {
+    background: #f3f4f6;
+}
+
+
+@media (max-width: 640px) {
+    .auth-card {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .auth-table th {
+        display: block;
+        text-align: left;
+        margin-top: 0.4rem;
+    }
+
+    .auth-table td {
+        display: block;
+        padding-top: 0.1rem;
+    }
+}
+
+.auth-card .auth-actions {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}

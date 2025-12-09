@@ -1,0 +1,86 @@
+/* django/static/partout/css/create_profile_form.css */
+
+
+
+/* =========================
+Create Profile Form Styling
+========================= */
+
+.container {
+    display: block;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px 10px;
+    border-radius: 20px;
+    background-color: #273248;
+}
+
+.fieldset {
+    border-radius: 15px;
+
+    table {
+        padding: 20px;
+    }
+}
+
+.legend {
+    margin-left: 30px;
+    letter-spacing: 1.5px;
+
+    font-size: larger;
+    font-weight: bolder;
+    padding: 20px;
+}
+
+.button-container {
+    margin-top: 40px;
+    margin-bottom: 20px;
+
+    display: flex;
+    gap: 100px;
+    justify-content: space-evenly;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+
+}
+
+.cancel-button {
+    padding: 10px 20px;
+    background-color: #ccc;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #555;
+    }
+    
+    input,
+    textarea {
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+

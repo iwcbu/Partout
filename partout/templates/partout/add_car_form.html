@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block sub_css %}
-<link rel="stylesheet" href="{% static 'partout/css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'partout/css/add_car_form.css' %}">
 {% endblock sub_css %}
 
 {% block content %}
@@ -23,99 +23,5 @@
     </section>
 </div>
 
-<style>
-    /* =========================
-   Add Car form
-   ========================= */
-
-    .profilePage .widget h2 {
-        margin-bottom: 0.75rem;
-        font-size: 1.25rem;
-        font-weight: 650;
-        color: #111827;
-    }
-
-    .profilePage .widget form {
-        background: #f9fafb;
-        border-radius: 14px;
-        padding: 1.1rem 1.25rem;
-        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-        border: 1px solid #e5e7eb;
-    }
-
-    /* form fields rendered by form.as_p */
-    .profilePage .widget form p {
-        margin: 0 0 0.7rem;
-    }
-
-    .profilePage .widget form label {
-        display: block;
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: #4b5563;
-        margin-bottom: 0.2rem;
-    }
-
-    .profilePage .widget form input[type="text"],
-    .profilePage .widget form input[type="number"],
-    .profilePage .widget form select {
-        width: 100%;
-        padding: 0.45rem 0.6rem;
-        border-radius: 8px;
-        border: 1px solid #d1d5db;
-        font-size: 0.9rem;
-        box-sizing: border-box;
-    }
-
-    .profilePage .widget form input:focus,
-    .profilePage .widget form select:focus {
-        outline: none;
-        border-color: #0a5aaa;
-        box-shadow: 0 0 0 1px rgba(10, 90, 170, 0.15);
-    }
-
-    /* buttons row */
-
-    .profilePage .widget form button[type="submit"],
-    .profilePage .widget form a[href] {
-        margin: 10px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.45rem 1.2rem;
-        border-radius: 999px;
-        font-size: 16px;
-        font-weight: 600;
-        border: 1px solid transparent;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    /* primary: Save car */
-    .profilePage .widget form button[type="submit"] {
-        background: #0a5aaa;
-        color: #ffffff;
-        border-color: #0a5aaa;
-        margin-right: 0.75rem;
-    }
-
-    .profilePage .widget form button[type="submit"]:hover {
-        background: #08497f;
-        border-color: #08497f;
-    }
-
-    /* secondary: Cancel */
-    .profilePage .widget form a[href] {
-        background: #ffffff;
-        color: #4b5563;
-        border-color: #d1d5db;
-    }
-
-    .profilePage .widget form a[href]:hover {
-        background: #f3f4f6;
-    }
-
-
-</style>
 
 {% endblock content %}
