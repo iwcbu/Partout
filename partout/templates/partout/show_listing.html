@@ -144,31 +144,33 @@
                     </tbody>
                 </table>
 
-                {% if user.is_authenticated and user != listing.seller.user %}
-                    <div class="listing-actions">
-                        <a href="{% url 'message_seller' listing.seller.pk %}"
-                        class="btn-primary">
-                            Message seller
-                        </a>
+                {% if user.is_authenticated %} 
+                    {% if user != listing.seller.user %}
+                        <div class="listing-actions">
+                            <a href="{% url 'message_seller' listing.seller.pk %}"
+                            class="btn-primary">
+                                Message seller
+                            </a>
 
-                        <a href="{% url 'create_offer' listing.pk %}"
-                        class="btn-secondary">
-                            Make an offer
-                        </a>
-                    </div>
-                {% else %}
-                    <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
-                        <a href="{% url 'update_listing' listing.pk %}"
-                        class="update-button"
-                        style="text-align: center; padding: 10px; border-radius: 8px; border: black 1px solid; background-color: #d7d7d7; color: rgb(13, 13, 13); text-decoration: none;">
-                            Update Listing
-                        </a>
+                            <a href="{% url 'create_offer' listing.pk %}"
+                            class="btn-secondary">
+                                Make an offer
+                            </a>
+                        </div>
+                    {% else %}
+                        <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+                            <a href="{% url 'update_listing' listing.pk %}"
+                            class="update-button"
+                            style="text-align: center; padding: 10px; border-radius: 8px; border: black 1px solid; background-color: #d7d7d7; color: rgb(13, 13, 13); text-decoration: none;">
+                                Update Listing
+                            </a>
 
-                        <a href="{% url 'delete_listing' listing.pk %}"
-                        class="delete-button">
-                            Delete
-                        </a>
-                    </div>
+                            <a href="{% url 'delete_listing' listing.pk %}"
+                            class="delete-button">
+                                Delete
+                            </a>
+                        </div>
+                    {% endif %}
                 {% endif %}
 
             </aside>
