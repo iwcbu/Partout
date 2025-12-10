@@ -1,0 +1,147 @@
+<!-- partout/templates/partout/show_ratings.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/messages.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+
+
+<a href="{% url 'show_profile' driver.pk %}" class="ratings-back-link">
+    &larr; Back
+</a>
+
+<h3 class="ratings-title">Ratings for {{ driver.username }}</h3>
+
+<main class="widget" style="justify-content: center;">
+
+    {% if ratings %}
+        {% for r in ratings %}
+            <div class="messageCard">
+                <a href="{% url 'show_profile' r.rater.pk %}" class="profile-link">
+                    {% if r.rater.profile_image %}
+                        <img src="{{ r.rater.profile_image.url }}"
+                             alt="{{ r.rater.first_name }}"
+                             class="avatar-image">
+                    {% else %}
+                        <img src="{% static 'partout/img/defaultpfp.jpg' %}"
+                             alt="profile picture"
+                             class="avatar-image">
+                    {% endif %}
+                </a>
+
+                <div class="rating-text">
+                    <h5>{{ r.rater.first_name }} {{ r.rater.last_name }}</h5>
+                    <h6><i>@{{ r.rater.username }}</i></h6>
+
+                    <p class="rating-score">Rating: {{ r.rating }} / 5</p>
+
+                    {% if r.comment %}
+                        <p class="rating-comment">{{ r.comment }}</p>
+                    {% endif %}
+
+                    {% if r.created %}
+                        <p class="rating-date">
+                            {{ r.created|date:"M j, Y" }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="ratings-empty">No ratings yet.</p>
+    {% endif %}
+</main>
+
+
+<style>
+
+.ratings-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    color: #0a5aaa;
+    font-weight: 600;
+}
+
+.ratings-back-link:hover {
+    text-decoration: underline;
+}
+
+.ratings-title {
+    margin: 10px 0 20px;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+
+.messageCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #efefef;
+    border: 1px solid #1f2933;
+    margin-bottom: 12px;
+}
+
+.avatar-image {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.rating-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.rating-text h5 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.rating-text h6 {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #8e9bb0;
+}
+
+.rating-score {
+    font-weight: 600;
+    margin-top: 4px;
+    font-size: 0.95rem;
+}
+
+.rating-comment {
+    margin: 2px 0 0;
+    font-size: 0.9rem;
+}
+
+.rating-date {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.ratings-empty {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.95rem;
+    color: #9ca3af;
+}
+
+</style>
+
+{% endblock %}

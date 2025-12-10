@@ -42,10 +42,9 @@ class HomeView(LoginRequiredMixin, TemplateView):
                            .order_by("-created")[:4]
         )
 
-        context["saved_listings"] = (
-            SavedListing.objects.filter(driver=driver)
-                                .order_by("-created")
-        )
+        slqs = SavedListing.objects.filter(driver=driver).order_by("-created")[:4]
+        saved_listings = [save.listing for save in slqs]
+        context["saved_listings"] = saved_listings
 
         return context
 
@@ -97,13 +96,13 @@ class MarketView(ListView):
         
         context = super().get_context_data(**kwargs)
 
-        # Choices for filters (for dropdowns in the template)
+        # choices for filters for dropdowns in the template
         context["part_type_choices"] = Listing._meta.get_field("part_type").choices
         context["condition_choices"] = Listing._meta.get_field("condition").choices
         context["drivetrain_choices"] = Car.drivetrain_choices
         context["ownership_type_choices"] = Car.ownership_type_choices
 
-        # Keep current filter values (so form can keep them selected)
+        # keep current filter values so that form can keep them selected
         context["current_filters"] = {
             "part_type": self.request.GET.get("part_type", ""),
             "drivetrain": self.request.GET.get("drivetrain", ""),
@@ -582,11 +581,6 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
         context["listings"] = (Listing.objects.filter(seller=driver).order_by("-created"))
 
-        context["saved_listings"] = (
-            SavedListing.objects.filter(driver=driver)
-                                .order_by("-created")
-        )
-
         ratings = Rating.objects.filter(rating_receiver=driver)
         
         avgRating = 0
@@ -601,16 +595,20 @@ class ProfileView(LoginRequiredMixin, DetailView):
         
         avgRating = round(avgRating, 1)
 
+
+        slqs = SavedListing.objects.filter(driver=driver).order_by("-created")
+        slqs4 = slqs[:4]
+        saved_listings = [save.listing for save in slqs4]
+        context["saved_listings"] = saved_listings
+
+
         followers = Follow.get_num_followers(driver)
         following = Follow.get_num_following(driver)
 
 
-
         context["stats"] = {
             "total_listings": driver.listings.count(),
-            "active_listings": driver.listings.filter(status="active").count(),
-            "total_cars": driver.cars.count(),
-            "saved_count": driver.saved_listings.count(),
+            "active_listings": driver.listings.filter(status="Active").count(),
             "rating": avgRating,
             "followers": followers,
             "following": following,
@@ -619,7 +617,6 @@ class ProfileView(LoginRequiredMixin, DetailView):
         userProfile = self.request.user.driver
         followers_qs = Follow.get_follower_profiles(driver)
         context["followed_by_user"] = userProfile in followers_qs
-
 
         return context
     
@@ -670,7 +667,7 @@ class CreateProfileView(CreateView):
         user = self.request.user
         driver = Driver.objects.get(user=user)
 
-        return reverse('profile', kwargs={'pk': driver.pk})
+        return reverse('show_profile', kwargs={'pk': driver.pk})
  
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
     """defines a view class to update a given profile"""
@@ -702,7 +699,7 @@ class FollowView(TemplateView):
     '''placement view holding follow relationship logic between driver profiles'''
 
     def get(self, request, *args, **kwargs):
-        '''get'''
+        '''get yeah get good'''
 
         user = request.user
 
@@ -715,7 +712,7 @@ class FollowView(TemplateView):
             driver = Driver.objects.get(pk=pk)
         except Driver.DoesNotExist: # missing driver rofile or network error
             from django.http import Http404
-            raise Http404("Profile not found")
+            raise Http404("Driver not found")
         
         userProfile = user.driver
         action = request.GET.get("action", "follow")
@@ -896,3 +893,207 @@ class SaveView(TemplateView):
         
         return redirect('show_listing', pk=listing.pk)
         
+class SavedListingsView(ListView):
+    '''Displays all saved listings for the user'''
+
+    model = SavedListing
+    template_name = "partout/show_saved_listings.html"
+    context_object_name = "listings"
+    paginate_by = 12
+    
+    def get_queryset(self):
+        '''returns the qs of savedlisting objects'''
+
+        user = self.request.user
+        if not user.is_authenticated:
+            return SavedListing.objects.none()
+        
+        driver = Driver.objects.get(user=user)
+
+        qs = (
+            SavedListing.objects.filter(driver=driver)
+                                .order_by("-created")
+        )
+
+        return qs
+    
+
+class AllDriverListingsView(ListView):
+    '''displays all listings no matter the status listed by a user'''
+
+    model = Listing
+    template_name = "partout/show_profile_listings.html"
+    context_object_name = "listings"
+    paginate_by = 12
+    
+    def get_queryset(self):
+        '''returns the qs of all listing objects listed by the driver'''
+
+        dpk = self.kwargs["pk"]
+        seller = Driver.objects.get(pk=dpk)
+
+        qs = (
+            Listing.objects.filter(seller=seller).order_by("-created")
+        )
+
+        return qs
+    
+    def get_context_data(self, **kwargs):
+        '''extracts sellers pk from url'''
+
+        context = super().get_context_data(**kwargs)
+
+        spk = self.kwargs["pk"]
+        seller = Driver.objects.get(pk=spk)
+
+        context["seller"] = seller
+
+        return context
+
+
+
+
+
+class ActiveDriverListingsView(ListView):
+    '''displays all active listings listed by a user'''
+
+    
+    model = Listing
+    template_name = "partout/show_active_profile_listings.html"
+    context_object_name = "listings"
+    paginate_by = 12
+    
+    def get_queryset(self):
+        '''returns the qs of active listing objects listed by the driver'''
+
+        
+        dpk = self.kwargs["pk"]
+        seller = Driver.objects.get(pk=dpk)
+
+        qs = (
+            Listing.objects.filter(seller=seller).filter(status="Active").order_by("-created")
+        )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        '''extracts sellers pk from url'''
+        
+        context = super().get_context_data(**kwargs)
+
+        spk = self.kwargs["pk"]
+        seller = Driver.objects.get(pk=spk)
+
+        context["seller"] = seller
+
+        return context
+
+
+
+
+
+
+class ShowFollowersView(DetailView):
+    '''defines a view class to show follower profiles for a given profile'''
+
+    model = Driver
+    template_name = 'partout/show_followers.html'
+    context_object_name = 'drivers'
+    
+    def get_context_data(self, **kwargs):
+        '''gets context data for followers'''
+
+        context = super().get_context_data()
+        
+        dpk = self.kwargs["pk"]
+
+        driver = Driver.objects.get(pk=dpk)
+        followers = Follow.get_followers(driver)
+
+        context["driver"] = driver
+        context['followers'] = followers
+
+        return context 
+
+
+
+class ShowFollowingView(DetailView):
+    '''defines a view class to show profiles followed by a given profile'''
+
+    model = Driver
+    template_name = 'partout/show_following.html'
+    context_object_name = 'drivers'
+
+    def get_context_data(self, **kwargs):
+        '''gets context data for follows'''
+        context = super().get_context_data()
+        
+        dpk = self.kwargs["pk"]
+
+        driver = Driver.objects.get(pk=dpk)
+        following = Follow.get_following(driver)
+
+        context["driver"] = driver
+        context['following'] = following
+
+        return context 
+   
+
+class CreateRatingView(LoginRequiredMixin, CreateView):
+    '''handles logic for creating a driver rating'''
+
+    model = Rating
+    form_class = CreateRatingForm
+    template_name = "partout/create_rating_form.html"
+
+    def get_context_data(self, **kwargs):
+        '''gets context data related'''
+
+        context = super().get_context_data(**kwargs)
+
+        dpk = self.kwargs["pk"]
+        driver = Driver.objects.get(pk=dpk)
+
+        context["rating_receiver"] = driver
+
+        return context
+
+
+    def form_valid(self, form):
+        ''' link the current user to the rater
+            link a driver to the rating receiver '''
+        rater = self.request.user.driver
+
+        dpk = self.kwargs["pk"]
+        driver = Driver.objects.get(pk=dpk)
+
+        form.instance.rater = rater
+        form.instance.rating_receiver = driver
+
+        return super().form_valid(form)
+    
+
+    def get_success_url(self):
+        '''redirects user to profile after ratings'''
+
+        return reverse("show_profile", kwargs={ "pk": self.object.rating_receiver.pk } )
+    
+
+class DriverRatingsView(DetailView):
+    """defines a view class to show profile ratings for a given profile"""
+
+    model = Driver
+    template_name = "partout/show_ratings.html"
+    context_object_name = "driver"
+
+    def get_context_data(self, **kwargs):
+        """gets context data for ratings"""
+        context = super().get_context_data(**kwargs)
+
+        driver = self.object
+        ratings = Rating.get_ratings(driver)
+
+        context["driver"] = driver
+        context["ratings"] = ratings
+
+        return context

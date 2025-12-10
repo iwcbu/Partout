@@ -67,6 +67,8 @@
   margin-bottom: 0.75rem;
   background: #f9fafb;
   transition: background 0.15s ease;
+
+  max-width: 350px;
 }
 
 .messageCard:hover {

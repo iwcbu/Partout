@@ -25,6 +25,9 @@
 
 .widget,
 .widgetLong {
+  display: flex;
+  flex-direction: column;
+  position: relative;
   background: #ffffff;
   border-radius: 12px;
   padding: 1rem;
@@ -162,8 +165,11 @@
 
 
 .home-link-button {
+
+
+    align-self: flex-start;
+
     display: inline-flex;
-    align-items: center;
     justify-content: center;
     padding: 0.45rem 0.9rem;
     margin: 10px;

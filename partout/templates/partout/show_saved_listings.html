@@ -1,0 +1,41 @@
+<!-- partout/templates/partout/show_saved_listings.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/market.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+
+
+<div class="container">
+    <a href="{% url 'show_profile' request.user.driver.pk %}">
+        <h4><- Back to profile</h4>
+    </a>
+    <h3>Saved Listings</h3>
+
+    <div class="widgetLong">
+        <div class="listingGallery">
+            {% for save in listings %}
+            <a href="{% url 'show_listing' save.listing.pk %}">
+                
+                <div class="listingGalleryCard">
+                    {% if save.listing.image%}
+                    <img src="{{ save.listing.image.url }}" alt="car part">
+                    {% else %}
+                    <img src="{% static 'partout/img/default_car.jpg' %}" alt="car part">
+                    {% endif %}
+                    <h4>{{ save.listing.title }}</h4>
+                    <p>{{ save.listing.description|slice:45 }}{% if save.listing.description|length > 30 %}...{% endif %}
+                    </p>
+                </div>
+                
+            </a>
+            {% endfor %}
+        </div> 
+    </div>
+</div>
+
+{% endblock %}

@@ -44,22 +44,23 @@
     <div class="widget">
         <h3>Saved Listings</h3>
             {% if saved_listings %}
-                {% for save in saved_listings %}
-                <a href="{% url 'show_listing' save.listing.pk %}">
+                {% for listing in saved_listings %}
+                <a href="{% url 'show_listing' listing.pk %}">
                     <div class="messageCard">
-                        {% if save.listing.image %}
-                        <img src="{{ save.listing.image.url }}" alt="car part">
+                        {% if listing.image %}
+                        <img src="{{ listing.image.url }}" alt="car part">
                         {% else %}
                         <img src="{% static 'partout/img/default_car' }" alt="car, image not available">
                         {% endif %}
                         <div>
-                            <h4>{{ save.listing.title|slice:15}}</h4>
-                            <p>{{ save.listing.description|slice:30 }}{% if save.listing.description|length > 30 %}...{% endif %}</p>
+                            <h4>{{ listing.title|slice:15}}</h4>
+                            <p>{{ listing.description|slice:30 }}{% if listing.description|length > 30 %}...{% endif %}</p>
                         </div>
 
                     </div>
                 </a>
                 {% endfor %}
+                <a href="{% url 'saved_listings' %}" class="home-link-button">Show all saved</a>
             {% else %}  
                 <h3 class="saved-listing-msg">No listings saved yet, go shopping!</h3>
             {% endif %}
@@ -84,7 +85,7 @@
             {% endfor %}
         </div>
         
-        <a href="{% url 'market' %}" class="home-link-button">Show all Listings</a>
+        <a href="{% url 'market' %}" class="home-link-button">Show all listings</a>
         
     </div>
         

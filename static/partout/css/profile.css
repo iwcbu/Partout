@@ -19,6 +19,7 @@
 .profileHeader {
   display: flex;
   flex-direction: column;
+  justify-items: center;
   gap: 1.25rem;
 }
 
@@ -92,13 +93,13 @@
 }
 
 /* at 768px vw, stats row go adjacent to primary info */
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   .profileHeader {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
-}
+} */
 
 /* =========================
    Garage section
@@ -144,7 +145,7 @@
   color: #6b7280;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .profileGarage-list {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }

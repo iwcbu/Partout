@@ -1,0 +1,41 @@
+<!-- partout/templates/partout/show_profile_listings.html -->
+
+{% extends 'partout/base.html' %}
+{% load static %}
+
+{% block sub_css %}
+<link rel="stylesheet" href="{% static 'partout/css/market.css' %}">
+{% endblock sub_css %}
+
+{% block content %}
+
+
+<div class="container">
+    <a href="{% url 'show_profile' seller.pk %}">
+        <h4><- Back to profile</h4>
+    </a>
+    <h3>{{ seller.first_name }}'s Active Listings</h3>
+
+    <div class="widgetLong">
+        <div class="listingGallery">
+            {% for listing in listings %}
+            <a href="{% url 'show_listing' listing.pk %}">
+                
+                <div class="listingGalleryCard">
+                    {% if listing.image%}
+                    <img src="{{ listing.image.url }}" alt="car part">
+                    {% else %}
+                    <img src="{% static 'partout/img/default_car.jpg' %}" alt="car part">
+                    {% endif %}
+                    <h4>{{ listing.title }}</h4>
+                    <p>{{ listing.description|slice:45 }}{% if listing.description|length > 30 %}...{% endif %}
+                    </p>
+                </div>
+                
+            </a>
+            {% endfor %}
+        </div> 
+    </div>
+</div>
+
+{% endblock %}

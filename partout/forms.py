@@ -120,10 +120,22 @@ class UpdateListingForm(forms.ModelForm):
 
        
 class CreateOfferForm(forms.ModelForm):
-    '''for to create a new listing for the market'''
+    '''to create a new offer for a listing'''
 
     class Meta:
         model = Offer
         fields = [
             "amount", 
+        ]
+
+
+
+class CreateRatingForm(forms.ModelForm):
+    '''to create a new rating for a profile'''
+
+    class Meta:
+        model = Rating
+        fields = [
+            "rating",
+            "comment" 
         ]

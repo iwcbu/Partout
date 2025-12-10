@@ -1,29 +1,32 @@
 <!-- partout/templates/partout/show_following.html -->
 
 {% extends 'partout/base.html' %}
+{% load static %}
 
 {% block sub_css %}
-<link rel="stylesheet" href="{% static 'partout/css/followdetail.css' %}">
+<link rel="stylesheet" href="{% static 'partout/css/messages.css' %}">
 {% endblock sub_css %}
 
 {% block content %}
 
-<a href="{% url 'show_profile' %}"><- Back</a>
+<a href="{% url 'show_profile' driver.pk %}"><- Back</a>
 <h3>Following</h3>
-<main class="profile-grid">
+<main class="widget" style="justify-content: center;">
 
     {% for follow in following %}
     <profile>
-        
-        <div class="name-info">
-            <h5>{{ follow.driver.first_name }} {{ follow.driver.last_name }}</h5>
-            <h6><i>{{ follow.driver.username }}</i></h6>
-        </div>
         <a href="{% url 'show_profile' follow.driver.pk %}" class="profile-link">
-            <img src="{{ follow.driver.profile_image.url }}" alt="{{ follow.driver.first_name }}" class="profile-image">
+            <div class="messageCard">
+                <h5>{{ follow.driver.first_name }} {{ follow.driver.last_name }}</h5>
+                <h6><i>{{ follow.driver.username }}</i></h6>
+                    {% if follow.driver.profile_image %}
+                    <img src="{{ follow.driver.profile_image.url }}" alt="Profile picture" class="avatar-image">
+                    {% else %}
+                    <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="profileAvatar">
+                    {% endif %}
+            </div>
         </a>
-            
-        </profile>
+    </profile>
 
     
     {% endfor %}

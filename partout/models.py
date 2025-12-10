@@ -251,6 +251,8 @@ class DirectMessage(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        '''returns string representation'''
+
         names = ""
         for p in self.participants.all():
             if p == self.participants.all()[0]:
@@ -271,17 +273,40 @@ class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
         
     def __str__(self):
+        '''returns string representation'''
+
         return f"Message from {self.sender} in {self.conversation}"
     
 
 class Rating(models.Model):
     '''contains rating model data'''
 
+    rating_choices = [
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    ]
+
     rater = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="ratings_given" )
     rating_receiver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="ratings_received")
-    rating = models.DecimalField(max_digits=1, decimal_places=0)
+    rating = models.PositiveIntegerField(choices=rating_choices, default=5)
     comment = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        '''returns string representation'''
+
         return f"{self.rating} stars from {self.rater} to {self.rating_receiver}"
+    
+    def get_ratings(driver):
+        '''gets all ratings for a given driver'''
+
+        ratings = (
+            Rating.objects.filter(rating_receiver=driver)
+                .order_by("-created")
+        )
+
+        return list(ratings)

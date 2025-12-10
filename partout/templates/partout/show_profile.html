@@ -26,26 +26,36 @@
         </div>
 
         <div class="profileStats">
-            <div class="profileStat">
-                <span class="profileStat-number">{{ stats.total_listings }} </span>
-                <span class="profileStat-label">Total Listings</span>
-            </div>
-            <div class="profileStat">
-                <span class="profileStat-number">{{ stats.active_listings }}</span>
-                <span class="profileStat-label">Active Listings</span>
-            </div>
-            <div class="profileStat">
-                <span class="profileStat-number">{{ stats.rating }}</span>
-                <span class="profileStat-label">Rating</span>
-            </div>
-            <div class="profileStat">
-                <span class="profileStat-number">{{ stats.followers }}</span>
-                <span class="profileStat-label">followers</span>
-            </div>
-            <div class="profileStat">
-                <span class="profileStat-number">{{ stats.following }}</span>
-                <span class="profileStat-label">following</span>
-            </div>
+            <a href="{% url 'all_driver_listings' driver.pk %}">
+                <div class="profileStat">
+                    <span class="profileStat-number">{{ stats.total_listings }} </span>
+                    <span class="profileStat-label">Total Listings</span>
+                </div>
+            </a>
+            <a href="{% url 'active_driver_listings' driver.pk %}">
+                <div class="profileStat">
+                    <span class="profileStat-number">{{ stats.active_listings }}</span>
+                    <span class="profileStat-label">Active Listings</span>
+                </div>
+            </a>
+            <a href="{% url 'show_ratings' driver.pk %}">
+                <div class="profileStat">
+                    <span class="profileStat-number">{{ stats.rating }}</span>
+                    <span class="profileStat-label">Rating</span>
+                </div>
+            </a>
+            <a href="{% url 'show_followers' driver.pk %}">
+                <div class="profileStat">
+                    <span class="profileStat-number">{{ stats.followers }}</span>
+                    <span class="profileStat-label">followers</span>
+                </div>
+            </a>
+            <a href="{% url 'show_following' driver.pk %}">
+                <div class="profileStat">
+                    <span class="profileStat-number">{{ stats.following }}</span>
+                    <span class="profileStat-label">following</span>
+                </div>
+            </a>
         </div>
     </section>
     <div>
@@ -65,7 +75,16 @@
                 {% endif %}
 
             {% endif %}
-        {% endif %}  
+        {% endif %} 
+
+        {% if request.user.is_authenticated %}
+
+            {% if request.user == driver.user %}
+            {% else %}
+                <a href="{% url 'create_rating' driver.pk %}?action=unfollow" class="follow-button" style="background-color: #ffc107; color: #000; border-color: #000;">Rate</a>
+            {% endif %}
+
+        {% endif %} 
     </div>
 
     <section class="widget profileGarage">
@@ -110,7 +129,7 @@
     </section>
 
     <section class="widget">
-        <h2>Recent listings</h2>
+        <a href="{% url 'all_driver_listings' driver.pk %}"><h2>All listings</h2></a>
         <div class="listingGallery">
             {% if stats.total_listings > 0 %}
                 {% for listing in listings %}
@@ -130,6 +149,32 @@
             {% else %}
                 <div>
                     <h3>No Listings yet</h3>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="widget">
+        <a href="{% url 'saved_listings' %}"><h2>Saved listings</h2></a>
+        <div class="listingGallery">
+            {% if saved_listings and driver.pk == request.user.driver.pk %}
+                {% for listing in saved_listings %}
+                <a href="{% url 'show_listing' listing.pk %}">
+                    <div class="listingGalleryCard">
+                        {% if listing.image %}
+                        <img src="{{ listing.image.url }}" alt="car part">
+                        {% else %}
+                        <img src="https://themechanicalengineering.com/wp-content/uploads/2020/09/Feature-Image-of-Piston.jpg" alt="car part">
+                        {% endif %}
+                        <h3>{{ listing.title }}</h3>
+                        <p>{% if listing.car %} Fits {{ listing.car }} {% endif %} {% if listing.condition %} • {{ listing.condition }} {% endif %} {% if listing.open_to_offers %} • Open to Offers {% else %} • Firm on Price {% endif %} </p>
+                    </div>
+                </a>
+                {% endfor %}
+
+            {% else %}
+                <div>
+                    <h3 style="text-align: center;">Nothing saved yet, <br> go shopping!</h3>
                 </div>
             {% endif %}
         </div>
