@@ -4,6 +4,8 @@ CS412 Final Project (Boston University): a full stack Django marketplace for the
 
 **Live demo:** https://cs-webapps.bu.edu/iwc3/partout/market
 
+**[Open Partout Folder](https://github.com/iwcbu/cs412-private/tree/main/partout)**
+
 ---
 
 ## What Partout Does
