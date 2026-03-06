@@ -68,18 +68,10 @@ class MarketView(ListView):
         )
 
         part_type = self.request.GET.get("part_type")
-        drivetrain = self.request.GET.get("drivetrain")
-        ownership_type = self.request.GET.get("ownership_type")
         search = self.request.GET.get("q")
 
         if part_type:
             qs = qs.filter(part_type=part_type)
-
-        if drivetrain:
-            qs = qs.filter(car__drivetrain=drivetrain)
-
-        if ownership_type:
-            qs = qs.filter(car__ownership_type=ownership_type)
 
         if search:
             qs = qs.filter(

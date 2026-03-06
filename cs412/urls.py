@@ -27,10 +27,10 @@ urlpatterns = [
     path('restaurant/', include('restaurant.urls')), # ps2
     path('blog/', include('blog.urls')), # modules 3-7 example
     path('mini_insta/', include('mini_insta.urls')), # ps3-ps7
-    path('marathon_analysis', include('marathon_analysis.urls')), # module 8 example
+    path('marathon_analysis/', include('marathon_analysis.urls')), # module 8 example
     path('voter_analytics/', include('voter_analytics.urls')), # ps8
-    path('dadjokes', include('dadjokes.urls')), # ps10
-    path('partout', include('partout.urls')), # ps10
+    path('dadjokes/', include('dadjokes.urls')), # ps10
+    path('partout/', include('partout.urls')), # ps10
 
 ]
 
