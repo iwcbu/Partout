@@ -2,7 +2,7 @@
 
 CS412 Final Project (Boston University): a full-stack Django marketplace for the car community—built for buying/selling parts, connecting with other drivers, and managing your own “garage” profile.
 
-**Live demo:** 
+**Live demo:** *Deployment is currently down**
 
 ---
 
