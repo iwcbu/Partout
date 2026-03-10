@@ -61,9 +61,9 @@ urlpatterns = [
 
 
      # auth
-    path('login', auth_views.LoginView.as_view(template_name='partout/login.html'), name='login'),
-    path('logout', auth_views.LogoutView.as_view(next_page='logout_confirmation'), name='logout'),
-    path('logged_out', TemplateView.as_view(template_name='partout/logout.html'), name='logout_confirmation'),
+    path('login/', auth_views.LoginView.as_view(template_name='partout/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='logout_confirmation'), name='logout'),
+    path('logged_out/', TemplateView.as_view(template_name='partout/logout.html'), name='logout_confirmation'),
 
 
 
