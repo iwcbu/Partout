@@ -145,3 +145,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS'  : 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE'                 : 10,
 }
+
+
+# Login/logout redirects
+
+LOGIN_URL = "/partout/login/"
+LOGIN_REDIRECT_URL = "/partout/"
+LOGOUT_REDIRECT_URL = "/partout/login/"

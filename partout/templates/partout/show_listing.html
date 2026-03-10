@@ -28,12 +28,12 @@
                 <p class="listing-meta">
                     Posted by
                     {% if listing.seller %}
-                    <a href="{% url 'show_profile' listing.seller.pk %}">
-                        {{ listing.seller.first_name }} {{ listing.seller.last_name }}
-                    </a>
+                        <a href="{% url 'show_profile' listing.seller.pk %}">
+                            {{ listing.seller.first_name }} {{ listing.seller.last_name }}
+                        </a>
                     {% else %}
-                    Unknown seller
-                {% endif %}
+                        Unknown seller
+                    {% endif %}
                 · {{ listing.created|date:"M j, Y, g:i a" }}
                 </p>
 
