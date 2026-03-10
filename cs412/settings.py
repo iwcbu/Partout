@@ -1,3 +1,5 @@
+#  cs412/settings.py
+
 """
 Django settings for cs412 project.
 
