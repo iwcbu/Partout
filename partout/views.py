@@ -1,5 +1,7 @@
 # partout/views.py
 
+from django.http import HttpResponseRedirect
+
 from .models import *
 from .forms import *
 
@@ -490,37 +492,27 @@ class ConversationView(LoginRequiredMixin, DetailView):
         return redirect("conversation", pk=convo.pk)
 
 
-class StartConvoView(LoginRequiredMixin, View):
-    
-    template_name = 'partout/start_convo_form.html'
-
-    def get_current_driver(self):
-        """maps the logged in user to the driver profile"""
-        user = self.request.user
-        if not user.is_authenticated:
-            return None
-
-        try:
-            return Driver.objects.get(user=user)
-        except Driver.DoesNotExist:
-            return None
+class StartConvoView(LoginRequiredMixin, CreateView):
+    model = DirectMessage
+    form_class = StartConvoForm
+    template_name = "partout/start_convo_form.html"
 
     def form_valid(self, form):
-            '''link the owner to the current user'''
+        self.object = form.save(commit=False)
+        self.object.owner = self.request.user.driver
+        self.object.save()
 
-            driver = self.request.user.driver
-            form.instance.owner = driver
+        form.save_m2m() 
 
-            return super().form_valid(form)
-    
+
+        print("StartConvoForm participants before adding driver: " + str(self.object.participants.all()))
+        self.object.participants.add(self.request.user.driver)
+        print("StartConvoForm participants before adding driver: " + str(self.object.participants.all()))
+
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        '''redirects user to their profile after creating a new car'''
-
-        driver = self.request.user.driver
-
-        return reverse("show_profile", kwargs={ "pk": driver.pk } )
-    
+        return reverse("conversation", kwargs={"pk": self.object.pk})
 
 
 class DeleteConvoView(DeleteView):

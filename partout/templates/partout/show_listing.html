@@ -60,7 +60,7 @@
             <div class="header-button-box">
         
                 {% if request.user.is_authenticated %}
-                    {% if request.user.profile != post.profile%}
+                    {% if request.user.profile != listing.seller %}
                         {% if liked_by_user %}
                             <a href="{% url 'delete_like' listing.pk %}?action=delete" class="dislike-button">Unike</a>
                         {% else %}
@@ -69,7 +69,7 @@
                     {% endif %}
                 {% endif %}
                 {% if request.user.is_authenticated %}
-                    {% if request.user.profile != post.profile%}
+                    {% if request.user.profile != listing.seller %}
                         {% if saved_by_user %}
                             <a href="{% url 'delete_save' listing.pk %}?action=delete" class="unsave-button">Unsave</a>
                         {% else %}
@@ -176,49 +176,7 @@
             </aside>
         </div>
 
-        <!-- interactions -->
-        <div class="text-section">
-            {# future comments / likes / offers could go here #}
-        </div>
-
     </div>
 </div>
 
 {% endblock %}
-
-
-
-<!-- 
-{% if likes|length > 1 %} 
-            <p class="listing-likes">Liked by <b><a href="{% url 'show_profile' likes.0.profile.pk %}" style="text-decoration: none; color: black;">{{ likes.0.profile.username }}</a></b> and <b>{{likes|length}} others</b></p>
-        {% elif likes|length == 1 %}
-            <p class="listing-likes">Liked by <b><a href="{% url 'show_profile' likes.0.profile.pk %}" style="text-decoration: none; color: black;">{{ likes.0.profile.username }}</a></b></p>
-        {% endif %}
-
-        {% if request.user.is_authenticated %}
-            {% if request.user.driver != listing.driver%}
-                {% if liked_by_user %}
-                    <a href="{% url 'delete_like' listing.pk %}?action=delete" class="dislike-button">Unike</a>
-                {% else %}
-                    <a href="{% url 'like' listing.pk %}?action=like"class="like-button">Like</a>
-                {% endif %}
-            {% endif %}
-        {% endif %}
-
-        <p id="postCaption"><b><a href="{% url 'show_profile' post.profile.pk %}" style="text-decoration: none; color: black;">{{ listing.driver.username }}</a></b>: {{ listing.caption }}</p>
-        <p id="postDate"><i>{{ listing.created|date:"M. j, Y" }}</i></p>
-
-        {% if request.user == listing.driver.user %}
-        <a href="{% url 'update_listing' listing.pk %}" id="update-button">Update Listing</a>
-        <a href="{% url 'delete_listing' listing.pk %}" id="delete-button">Delete Listing</a>
-        {% endif %}
-
-        <div class="commentSection">
-            {% if comments %}
-                {% for c in comments %}
-                <p class="comment"><b><a href="{% url 'show_profile' c.driver.pk %}" style="text-decoration: none; color: black;">{{c.driver.username}}</a></b>: {{ c.text }}</p> 
-                {% endfor %}
-            {% else %}
-                <p class="comment">No comments yet</p>
-            {% endif %}
-        </div> -->

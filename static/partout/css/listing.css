@@ -4,10 +4,10 @@
 
 
 .widget {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 10vw 5vh;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .widget h2 {

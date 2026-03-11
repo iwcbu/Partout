@@ -139,3 +139,10 @@ class CreateRatingForm(forms.ModelForm):
             "rating",
             "comment" 
         ]
+
+class StartConvoForm(forms.ModelForm):
+    '''to start a new conversation with another user'''
+
+    class Meta:
+        model = DirectMessage
+        fields = [ "participants", "listing" ]
