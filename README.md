@@ -25,7 +25,7 @@ Partout is a community-first marketplace where users can:
 - **Backend:** Django (Python), Django ORM
 - **Views:** Django class-based views (ListView/DetailView/CreateView/UpdateView/DeleteView)
 - **Auth:** Django built-in authentication (login/logout)
-- **Media:** Image uploads for profiles/listings (commonly via Pillow)
+- **Media:** Image uploads for profiles/listings (via Pillow)
 
 ---
 
