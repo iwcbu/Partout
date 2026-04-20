@@ -154,10 +154,11 @@
         </div>
     </section>
 
+    {% if driver.pk == request.user.driver.pk %}
     <section class="widget">
         <a href="{% url 'saved_listings' %}"><h2>Saved listings</h2></a>
         <div class="listingGallery">
-            {% if saved_listings and driver.pk == request.user.driver.pk %}
+            {% if saved_listings %}
                 {% for listing in saved_listings %}
                 <a href="{% url 'show_listing' listing.pk %}">
                     <div class="listingGalleryCard">
@@ -179,6 +180,7 @@
             {% endif %}
         </div>
     </section>
+    {% endif %}
 
 </div>
 {% endblock content %}

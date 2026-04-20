@@ -29,7 +29,8 @@
              
                         {% url 'login' as login_url %} <!-- assign login url as login_url -->
                         {% if request.path != login_url %} <!-- show if we aren't on the login page -->
-                        <li style="display: flex; flex-direction: column;color: white;">{{ request.user.driver.username }}
+                        <li style="display: flex; flex-direction: row;color: white; gap: 10px; margin-left: auto;">
+                            {{ request.user.driver.username }}
                             <form action="{% url 'logout' %}" method="POST">
                                 {% csrf_token %}
                                 <input type="submit" value="Logout">

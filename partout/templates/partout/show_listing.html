@@ -42,41 +42,82 @@
                         Location: {{ listing.location }}
                     </p>
                 {% endif %}
-                <p class="listing-details-header">
-                    {% if likes|length == 1 %}
-                    <b>{{likes|length}} like</b>
-                    {% else %}
-                     <b>{{likes|length}} likes</b>
-                   {% endif %}
-                </p>
-                <p class="listing-details-header">
-                    {% if saves|length == 1 %}
-                    <b>{{saves|length}} save</b>
-                    {% else %}
-                     <b>{{saves|length}} saves</b>
-                   {% endif %}
-                </p>
-            </div>
-            <div class="header-button-box">
-        
-                {% if request.user.is_authenticated %}
-                    {% if request.user.profile != listing.seller %}
+                <div style="display: flex;">
+                    {% if request.user.is_authenticated or request.user.profile != listing.seller %}
+                    <p class="listing-details-header">
+                        
                         {% if liked_by_user %}
-                            <a href="{% url 'delete_like' listing.pk %}?action=delete" class="dislike-button">Unike</a>
+                        <a href="{% url 'delete_like' listing.pk %}?action=delete" class="dislike-button">    
+                            
+                            {% if likes|length == 1 %}
+                            <b>{{likes|length}} like</b>
+                            {% else %}
+                            <b>{{likes|length}} likes</b>
+                            {% endif %}
+
+                        </a>
+
                         {% else %}
-                            <a href="{% url 'like' listing.pk %}?action=like"class="like-button">Like</a>
+                        <a href="{% url 'like' listing.pk %}?action=like" class="like-button">
+                            
+                            {% if likes|length == 1 %}
+                            <b>{{likes|length}} like</b>
+                            {% else %}
+                            <b>{{likes|length}} likes</b>
+                            {% endif %}
+
+                        </a>
                         {% endif %}
-                    {% endif %}
-                {% endif %}
-                {% if request.user.is_authenticated %}
-                    {% if request.user.profile != listing.seller %}
+                    </p>
+
+                    <p class="listing-details-header">
+
                         {% if saved_by_user %}
-                            <a href="{% url 'delete_save' listing.pk %}?action=delete" class="unsave-button">Unsave</a>
+                        <a href="{% url 'delete_save' listing.pk %}?action=delete" class="unsave-button">
+                            
+                            {% if saves|length == 1 %}
+                            <b>{{saves|length}} save</b>
+                            {% else %}
+                            <b>{{saves|length}} saves</b>
+                            {% endif %}
+
+                        </a>
+
                         {% else %}
-                            <a href="{% url 'save' listing.pk %}?action=save"class="like-button">Save</a>
+                        <a href="{% url 'save' listing.pk %}?action=save" class="like-button">
+                            
+                            {% if saves|length == 1 %}
+                            <b>{{saves|length}} save</b>
+                            {% else %}
+                            <b>{{saves|length}} saves</b>
+                            {% endif %}
+
+                        </a>
                         {% endif %}
+
+                    {% else %}
+                    <p class="listing-details-header">
+                        {% if likes|length == 1 %}
+                        <b>{{likes|length}} like</b>
+                        {% else %}
+                        <b>{{likes|length}} likes</b>
+                        {% endif %}
+                    </p>
+
+                    <p class="listing-details-header">
+                            {% if saves|length == 1 %}
+                            <b>{{saves|length}} save</b>
+                            {% else %}
+                            <b>{{saves|length}} saves</b>
+                            {% endif %}
+                        </div>
+                    </p>
                     {% endif %}
-                {% endif %}
+                </div>
+            </div>
+            <div class="header-button-box" style="display: flex; gap: 10px;">
+            
+                        
             </div>
         </section>
 

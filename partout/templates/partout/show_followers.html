@@ -9,13 +9,14 @@
 
 {% block content %}
 
-<a href="{% url 'show_profile' driver.pk %}"><- Back</a>
-<h3>Following</h3>
-<main class="widget" style="margin: 0 auto;">
-
-    {% for follow in followers %}
+<div style="width: 700px; margin: 0 auto;">
+    <a href="{% url 'show_profile' driver.pk %}"><- Back</a>
+    <h3>Followers</h3>
+    <main class="widget" style="margin: 0 auto; width: 30vw; max-width: 350px;">
+        
+        {% for follow in followers %}
         <profile>
-    
+            
             <a href="{% url 'show_profile' follow.driver_that_followed.pk %}" class="profile-link">
                 <div class="messageCard">
                     {% if follow.driver_that_followed.profile_image %}
@@ -23,14 +24,17 @@
                     {% else %}
                     <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="profileAvatar">
                     {% endif %}
-                    <h5>{{ follow.driver_that_followed.first_name }} {{ follow.driver_that_followed.last_name }}</h5>
-                    <h6><i>{{ follow.driver_that_followed.username }}</i></h6>
+                    <div style="display: flex; flex-direction: column;">
+                        <h5 style="margin: 0;">{{ follow.driver_that_followed.first_name }} {{ follow.driver_that_followed.last_name }}</h5>
+                        <h6 style="margin: 0;"><i>{{ follow.driver_that_followed.username }}</i></h6>
+                    </div>
                 </div>
             </a>
-                
+            
         </profile>
-    {% endfor %}
-</main>
+        {% endfor %}
+    </main>
+</div>
 
 
 {% endblock %}

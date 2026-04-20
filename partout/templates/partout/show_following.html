@@ -8,29 +8,31 @@
 {% endblock sub_css %}
 
 {% block content %}
-
-<a href="{% url 'show_profile' driver.pk %}"><- Back</a>
-<h3>Following</h3>
-<main class="widget" style="justify-content: center;">
-
-    {% for follow in following %}
-    <profile>
-        <a href="{% url 'show_profile' follow.driver.pk %}" class="profile-link">
-            <div class="messageCard">
-                <h5>{{ follow.driver.first_name }} {{ follow.driver.last_name }}</h5>
-                <h6><i>{{ follow.driver.username }}</i></h6>
+<div style="width: 700px; margin: 0 auto;">
+    <a href="{% url 'show_profile' driver.pk %}"><- Back</a>
+    <h3>Following</h3>
+    <main class="widget" style="margin: 0 auto; width: 30vw; max-width: 350px;">
+        
+        {% for follow in following %}
+        <profile>
+            
+            <a href="{% url 'show_profile' follow.driver.pk %}" class="profile-link">
+                <div class="messageCard">
                     {% if follow.driver.profile_image %}
-                    <img src="{{ follow.driver.profile_image.url }}" alt="Profile picture" class="avatar-image">
+                    <img src="{{ follow.driver.profile_image.url }}" alt="{{ follow.driver.first_name }}" class="profile-image">
                     {% else %}
                     <img src="{% static 'partout/img/defaultpfp.jpg' %}" alt="profile picture" class="profileAvatar">
                     {% endif %}
-            </div>
-        </a>
-    </profile>
-
-    
-    {% endfor %}
-</main>
-
+                    <div style="display: flex; flex-direction: column;">
+                        <h5 style="margin: 0;">{{ follow.driver.first_name }} {{ follow.driver.last_name }}</h5>
+                        <h6 style="margin: 0;"><i>{{ follow.driver.username }}</i></h6>
+                    </div>
+                </div>
+            </a>
+            
+        </profile>
+        {% endfor %}
+    </main>
+</div>
 
 {% endblock %}
